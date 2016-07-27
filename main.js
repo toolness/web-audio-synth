@@ -1,28 +1,28 @@
-var audioCtx = new AudioContext();
-var source = audioCtx.createBufferSource();
-var scriptNode = audioCtx.createScriptProcessor(1024, 1, 1);
-var signal = 1;
-var samplesUntilSignalFlip = 0;
-var samplesPerSignalFlip;
-var currFreq = 220;
+let audioCtx = new AudioContext();
+let source = audioCtx.createBufferSource();
+let scriptNode = audioCtx.createScriptProcessor(1024, 1, 1);
+let signal = 1;
+let samplesUntilSignalFlip = 0;
+let samplesPerSignalFlip;
+let currFreq = 220;
 
 source.connect(scriptNode);
 scriptNode.connect(audioCtx.destination);
 source.start();
 freq(currFreq);
 
-setInterval(function() {
+setInterval(() => {
   currFreq += 1;
   freq(currFreq);
 }, 5);
 
-scriptNode.onaudioprocess = function(e) {
-  var outputBuffer = e.outputBuffer;
+scriptNode.onaudioprocess = e => {
+  let outputBuffer = e.outputBuffer;
 
-  for (var chan = 0; chan < e.outputBuffer.numberOfChannels; chan++) {
-    var data = e.outputBuffer.getChannelData(chan);
+  for (let chan = 0; chan < e.outputBuffer.numberOfChannels; chan++) {
+    let data = e.outputBuffer.getChannelData(chan);
 
-    for (var i = 0; i < e.outputBuffer.length; i++) {
+    for (let i = 0; i < e.outputBuffer.length; i++) {
       if (samplesUntilSignalFlip == 0) {
         signal = -signal;
         samplesUntilSignalFlip = samplesPerSignalFlip;

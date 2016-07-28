@@ -26,7 +26,7 @@ class TriangleWave {
 
     let self = this;
     let slope = this._slope;
-    let signal = SIGNAL_LOW;
+    let signal = 0;
 
     function *signalGenerator() {
       while (true) {

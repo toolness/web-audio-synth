@@ -3,8 +3,8 @@
 let audioCtx = new AudioContext();
 let source = audioCtx.createBufferSource();
 let scriptNode = audioCtx.createScriptProcessor(1024, 1, 1);
-let squareWave = new SquareWave(audioCtx.sampleRate);
-let squareWaveSignal = squareWave.signal();
+let wave = new TriangleWave(audioCtx.sampleRate);
+let waveSignal = wave.signal();
 
 source.connect(scriptNode);
 scriptNode.connect(audioCtx.destination);
@@ -17,7 +17,7 @@ scriptNode.onaudioprocess = e => {
     let data = e.outputBuffer.getChannelData(chan);
 
     for (let i = 0; i < e.outputBuffer.length; i++) {
-      data[i] = squareWaveSignal.next().value;
+      data[i] = waveSignal.next().value;
     }
   }
 };
@@ -27,5 +27,5 @@ function stop() {
 }
 
 setInterval(() => {
-  squareWave.freq += 1;
+  wave.freq += 1;
 }, 5);

@@ -12,6 +12,7 @@ h1, h2 {
 }
 
 .pad {
+  position: relative;
   background: #f0f0f0;
   color: darkgray;
   padding: 4em;
@@ -25,8 +26,27 @@ h1, h2 {
                                   not supported by any browser */
 }
 
-.pad:not(.active) .info {
+.pad:not(.active) .info, .pad:not(.active) svg {
   opacity: 0;
+}
+
+.pad svg {
+  transition: opacity 0.15s;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pad svg path {
+  stroke: lightgray;
+  fill: none;
+}
+
+.pad h2, .pad p {
+  position: relative;
+  z-index: 1;
 }
 
 .info {
@@ -38,16 +58,19 @@ h1, h2 {
 <h1>web audio fun</h1>
 
 <div id="pulse" class="pad">
+  <svg><path d=""/></svg>
   <h2>Pulse Wave</h2>
   <p class="info">160 hz, 50% duty cycle</p>
 </div>
 
 <div id="triangle" class="pad">
+  <svg><path d=""/></svg>
   <h2>Triangle Wave</h2>
   <p class="info">160 hz</p>
 </div>
 
 <div id="noise" class="pad">
+  <svg><path d=""/></svg>
   <h2>Noise</h2>
 </div>
 

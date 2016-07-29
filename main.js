@@ -9,9 +9,37 @@ let noise = new Noise();
 let currSignal = null;
 
 function bindPad(el, source, cb) {
+  let isDown = false;
   let info = el.querySelector('.info');
+  let svg = el.querySelector('svg');
 
   cb = cb || function() {};
+
+  function draw() {
+    let me = el.getBoundingClientRect();
+    let width = me.width;
+    let height = me.height;
+    let signal = source.signal();
+    let path = svg.querySelector('path');
+    let segments = [];
+    let increment = 1;
+
+    svg.setAttribute('width', width);
+    svg.setAttribute('height', height);
+
+    for (let i = 0; i < width; i += increment) {
+      let value = signal.next().value;
+
+      value = height - (value * (height / 2) + (height / 2));
+      segments.push((i == 0 ? "M " : "L ") + i + " " + value);
+
+      for (let j = 1; j < increment; j++) {
+        signal.next();
+      }
+    }
+
+    path.setAttribute('d', segments.join(' '));
+  }
 
   function notify(e) {
     let me = el.getBoundingClientRect();
@@ -22,17 +50,25 @@ function bindPad(el, source, cb) {
     if (info && desc) {
       info.textContent = desc;
     }
+
+    draw();
   }
 
   el.onmousedown = e => {
+    isDown = true;
     currSignal = source.signal();
     notify(e);
     el.classList.add('active');
   };
 
-  el.onmousemove = notify;
+  el.onmousemove = e => {
+    if (!isDown) return;
+
+    notify(e);
+  };
 
   el.onmouseup = e => {
+    isDown = false;
     el.classList.remove('active');
   };
 }

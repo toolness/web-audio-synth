@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css?family=Lato:400,300,700,900" rel="stylesheet">
 <style>
+html {
+  text-align: center;
+  font-family: "Lato", Helvetica, Arial, sans-serif;
+}
+
+h1, h2 {
+  font-weight: 900;
+}
+
 .pad {
   background: #f0f0f0;
   color: darkgray;
   padding: 4em;
-  text-align: center;
   margin-bottom: 2.5em;
   cursor: pointer;
   -webkit-touch-callout: none; /* iOS Safari */
@@ -15,20 +24,31 @@
   user-select: none;           /* Non-prefixed version, currently
                                   not supported by any browser */
 }
+
+.pad:not(.active) .info {
+  opacity: 0;
+}
+
+.info {
+  transition: opacity 0.15s;
+  font-weight: 100;
+}
 </style>
 <title>web audio fun</title>
 <h1>web audio fun</h1>
 
 <div id="pulse" class="pad">
-Pulse Wave
+  <h2>Pulse Wave</h2>
+  <p class="info">160 hz, 50% duty cycle</p>
 </div>
 
 <div id="triangle" class="pad">
-Triangle Wave
+  <h2>Triangle Wave</h2>
+  <p class="info">160 hz</p>
 </div>
 
 <div id="noise" class="pad">
-Noise
+  <h2>Noise</h2>
 </div>
 
 <script src="pulse-wave.js"></script>

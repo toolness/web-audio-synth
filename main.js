@@ -8,9 +8,32 @@ let pulseWave = new PulseWave(audioCtx.sampleRate);
 let noise = new Noise();
 let currSignal = null;
 
-function bindPad(el, source) {
+function bindPad(el, source, cb) {
+  let info = el.querySelector('.info');
+
+  cb = cb || function() {};
+
+  function notify(e) {
+    let me = el.getBoundingClientRect();
+    let myX = e.clientX - me.left;
+    let myY = e.clientY - me.top;
+    let desc = cb(myX / me.width, myY / me.height);
+
+    if (info && desc) {
+      info.textContent = desc;
+    }
+  }
+
   el.onmousedown = e => {
     currSignal = source.signal();
+    notify(e);
+    el.classList.add('active');
+  };
+
+  el.onmousemove = notify;
+
+  el.onmouseup = e => {
+    el.classList.remove('active');
   };
 }
 
@@ -38,8 +61,19 @@ document.documentElement.onmouseup = () => {
   currSignal = null;
 };
 
-bindPad(document.getElementById('pulse'), pulseWave);
+bindPad(document.getElementById('pulse'), pulseWave, (x, y) => {
+  pulseWave.freq = Math.floor(20 + (x * 800));
+  pulseWave.dutyCycle = y;
 
-bindPad(document.getElementById('triangle'), triangleWave);
+  let dc = Math.floor(pulseWave.dutyCycle * 100);
+
+  return pulseWave.freq + " hz, " + dc + "% duty cycle";
+});
+
+bindPad(document.getElementById('triangle'), triangleWave, (x, y) => {
+  triangleWave.freq = Math.floor(20 + (x * 800));
+
+  return triangleWave.freq + " hz";
+});
 
 bindPad(document.getElementById('noise'), noise);

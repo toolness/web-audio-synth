@@ -22,20 +22,15 @@ function bindPad(el, source, cb) {
     let signal = source.signal();
     let path = svg.querySelector('path');
     let segments = [];
-    let increment = 1;
 
     svg.setAttribute('width', width);
     svg.setAttribute('height', height);
 
-    for (let i = 0; i < width; i += increment) {
+    for (let i = 0; i < width; i += 1) {
       let value = signal.next().value;
 
       value = height - (value * (height / 2) + (height / 2));
       segments.push((i == 0 ? "M " : "L ") + i + " " + value);
-
-      for (let j = 1; j < increment; j++) {
-        signal.next();
-      }
     }
 
     path.setAttribute('d', segments.join(' '));

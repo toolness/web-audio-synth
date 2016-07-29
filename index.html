@@ -1,8 +1,36 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<style>
+.pad {
+  background: #f0f0f0;
+  color: darkgray;
+  padding: 4em;
+  text-align: center;
+  margin-bottom: 2.5em;
+  cursor: pointer;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+}
+</style>
 <title>web audio fun</title>
 <h1>web audio fun</h1>
-<button autofocus id="stop" onclick="stop()">STOP</button>
+
+<div id="pulse" class="pad">
+Pulse Wave
+</div>
+
+<div id="triangle" class="pad">
+Triangle Wave
+</div>
+
+<div id="noise" class="pad">
+Noise
+</div>
+
 <script src="pulse-wave.js"></script>
 <script src="triangle-wave.js"></script>
 <script src="noise.js"></script>

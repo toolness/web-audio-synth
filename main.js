@@ -3,8 +3,16 @@
 let audioCtx = new AudioContext();
 let source = audioCtx.createBufferSource();
 let scriptNode = audioCtx.createScriptProcessor(1024, 1, 1);
-let wave = new TriangleWave(audioCtx.sampleRate);
-let waveSignal = wave.signal();
+let triangleWave = new TriangleWave(audioCtx.sampleRate);
+let pulseWave = new PulseWave(audioCtx.sampleRate);
+let noise = new Noise();
+let currSignal = null;
+
+function bindPad(el, source) {
+  el.onmousedown = e => {
+    currSignal = source.signal();
+  };
+}
 
 source.connect(scriptNode);
 scriptNode.connect(audioCtx.destination);
@@ -17,15 +25,21 @@ scriptNode.onaudioprocess = e => {
     let data = e.outputBuffer.getChannelData(chan);
 
     for (let i = 0; i < e.outputBuffer.length; i++) {
-      data[i] = waveSignal.next().value;
+      if (currSignal) {
+        data[i] = currSignal.next().value;
+      } else {
+        data[i] = 0;
+      }
     }
   }
 };
 
-function stop() {
-  scriptNode.disconnect(audioCtx.destination);
-}
+document.documentElement.onmouseup = () => {
+  currSignal = null;
+};
 
-setInterval(() => {
-  wave.freq += 1;
-}, 5);
+bindPad(document.getElementById('pulse'), pulseWave);
+
+bindPad(document.getElementById('triangle'), triangleWave);
+
+bindPad(document.getElementById('noise'), noise);

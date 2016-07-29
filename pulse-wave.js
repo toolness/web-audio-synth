@@ -1,4 +1,4 @@
-class SquareWave {
+class PulseWave {
   constructor(sampleRate) {
     this.sampleRate = sampleRate;
     this._dutyCycle = 0.5;

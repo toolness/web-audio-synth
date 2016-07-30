@@ -8,7 +8,10 @@ class Fader {
   }
 
   set source(source) {
-    this._sourceSignal = source ? source.signal() : null;
+    if (source !== this._source) {
+      this._source = source;
+      this._sourceSignal = source ? source.signal() : null;
+    }
   }
 
   fadeIn() {

@@ -37,6 +37,28 @@
   </button>
 </div>
 
+<div class="container">
+  <p>
+    I thought it would be easiest to start by recreating the beginning of
+    my experience, as a listener, of interesting electronic audio.
+  </p>
+  <p>
+    This was the Nintendo Entertainment System (NES). It had two pulse
+    wave generators, and each could be configured to use one of four
+    different duty cycles.
+  </p>
+  <p>
+    Click and drag on the pad above to experiment with pulse wave
+    synthesis. The x axis controls the frequency of the pulse wave,
+    while the y axis controls the duty cycle.
+  </p>
+  <aside>
+    Note that all pads on this page are built with accessibility in mind.
+    Use <kbd>tab</kbd> to focus on a pad and receive instructions on
+    keyboard use.
+  </aside>
+</div>
+
 <div id="triangle" class="pad">
   <svg><path d=""/></svg>
   <h2>Triangle Wave</h2>
@@ -45,6 +67,16 @@
     Press enter to toggle the triangle wave. Use the left and right arrows
     to control its frequency.
   </button>
+</div>
+
+<div class="container">
+  <p>
+    The NES had one triangle wave generator, and it came with a number
+    of limitations. According to
+    <a href="https://www.youtube.com/watch?v=la3coK5pq5w"
+     >NES Audio: Brief Explanation of Sound Channels</a>, 
+    it was most frequently used for basslines in Nintendo music.
+  </p>
 </div>
 
 <div id="sine" class="pad">
@@ -57,22 +89,53 @@
   </button>
 </div>
 
+<div class="container">
+  <p>
+    The sine wave is a
+    <a href="https://en.wikipedia.org/wiki/Musical_tone#Pure_tone"
+     >pure tone</a>, which as I understand it, is the fundamental
+    building block of more complex sounds. In fact, any periodic
+    waveform, including the pulse and triangle waves, can be described as
+    a series of these.
+  </p>
+  <p>
+    None of the early audio systems I know of produce plain old sine waves.
+    I'm not sure if this is because they're boring, or because pure tones
+    were hard to produce back then, or some other reason.
+  </p>
+</div>
+
 <div id="noise" class="pad">
   <svg><path d=""/></svg>
   <h2>Noise</h2>
-  <p role="status">Just a bunch of random shit.</p>
+  <p role="status">Just a bunch of random stuff.</p>
   <button>
     Press enter to toggle the noise.
   </button>
 </div>
 
 <div class="container">
+  <p>
+    I am befuddled by noise.
+  </p>
+  <p>
+    As far as I can tell, noise has no "frequency", it's just a bunch
+    of random numbers. And yet the noise generator in the NES
+    somehow supported 16 different frequencies.
+  </p>
+  <p>
+    In any case, it looks like noise is mostly used to synthesize
+    percussive sounds.
+  </p>
+</div>
+
+<footer class="container">
   <p>Everything here is in the public domain.</p>
   <p>
     Except for the <a href="https://www.lobdell.me/affogato/">Affogato</a>
     font, which is &copy; Eric Lobdell 2016.
   </p>
-</div>
+</footer>
 
 <script>
 var errorCount = 0;

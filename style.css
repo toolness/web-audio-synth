@@ -99,3 +99,12 @@ a {
   text-align: left;
   height: auto;
 }
+
+aside {
+  font-style: italic;
+  font-size: smaller;
+}
+
+footer {
+  border-top: 1px dotted gray;
+}

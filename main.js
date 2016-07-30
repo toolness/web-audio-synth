@@ -22,7 +22,7 @@ function bindDebouncedResize(cb) {
 
 function bindPad(el, source, cb) {
   let isMouseDown = false;
-  let info = el.querySelector('.info');
+  let status = el.querySelector('p[role="status"]');
   let svg = el.querySelector('svg');
   let button = el.querySelector('button');
 
@@ -53,8 +53,8 @@ function bindPad(el, source, cb) {
   function notify(x, y) {
     let desc = cb(x, y);
 
-    if (info && desc) {
-      info.textContent = desc;
+    if (status && desc) {
+      status.textContent = desc;
     }
 
     draw();

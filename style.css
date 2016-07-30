@@ -26,7 +26,7 @@ h2 {
                                   not supported by any browser */
 }
 
-.pad:not(.active) .info {
+.pad:not(.active) p[role="status"] {
   opacity: 0;
 }
 

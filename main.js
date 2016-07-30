@@ -5,6 +5,7 @@ let source = audioCtx.createBufferSource();
 let scriptNode = audioCtx.createScriptProcessor(1024, 1, 1);
 let triangleWave = new TriangleWave(audioCtx.sampleRate);
 let pulseWave = new PulseWave(audioCtx.sampleRate);
+let sineWave = new SineWave(audioCtx.sampleRate);
 let noise = new Noise();
 let currSignal = null;
 
@@ -107,6 +108,12 @@ bindPad(document.getElementById('triangle'), triangleWave, (x, y) => {
   triangleWave.freq = Math.floor(20 + (x * 800));
 
   return triangleWave.freq + " hz";
+});
+
+bindPad(document.getElementById('sine'), sineWave, (x, y) => {
+  sineWave.freq = Math.floor(20 + (x * 800));
+
+  return sineWave.freq + " hz";
 });
 
 bindPad(document.getElementById('noise'), noise);

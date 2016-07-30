@@ -62,10 +62,12 @@ function bindPad(el, source, cb) {
     notify(e);
   };
 
-  el.onmouseup = e => {
+  document.documentElement.addEventListener('mouseup', e => {
+    if (!isDown) return;
+
     isDown = false;
     el.classList.remove('active');
-  };
+  }, false);
 }
 
 source.connect(scriptNode);

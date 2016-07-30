@@ -68,6 +68,14 @@ p {
 a {
   color: inherit;
 }
+
+#fail {
+  color: red;
+}
+
+#fail:not(.active) {
+  display:none;
+}
 </style>
 <title>web audio fun</title>
 <h1>web audio fun</h1>
@@ -77,10 +85,16 @@ a {
   This is my attempt to learn about audio synthesis by generating
   waveforms in the browser.
 </p>
-<p>
-  This experiment uses ES2015 without a transpiler, so it probably
-  won't work unless your browser is really awesome.
-</p>
+<div id="fail">
+  <p>
+    This experiment uses ES2015 without a transpiler, so it probably
+    won't work unless your browser is really awesome.
+  </p>
+  <p>
+    At the time of this writing, that means you need to be using the latest
+    version of Chrome, Edge, or Firefox.
+  </p>
+</div>
 <p>
   For more details, check out the <a href="http://github.com/toolness/web-audio-synth">GitHub repository</a>.
 </p>
@@ -108,7 +122,19 @@ a {
   <p>Everything here is in the public domain.</p>
 </div>
 
+<script>
+var errorCount = 0;
+
+window.onerror = function() {
+  errorCount++;
+};
+</script>
 <script src="pulse-wave.js"></script>
 <script src="triangle-wave.js"></script>
 <script src="noise.js"></script>
 <script src="main.js"></script>
+<script>
+if (errorCount) {
+  document.getElementById('fail').className = 'active';
+}
+</script>

@@ -14,6 +14,7 @@ let noise = new Noise();
 
 function bindDebouncedResize(cb) {
   const DELAY = 250;
+
   let timeout;
 
   window.addEventListener('resize', () => {
@@ -33,6 +34,7 @@ function bindPad(el, source, cb) {
 
   function draw() {
     const V_MARGIN = 0.1;
+
     let me = el.getBoundingClientRect();
     let width = me.width;
     let height = me.height;
@@ -107,6 +109,7 @@ function bindPad(el, source, cb) {
     const RIGHT_ARROW = 39;
     const DOWN_ARROW = 40;
     const KBD_INCREMENT = 0.01;
+
     let isKbdDown = false;
     let kbdX = 0.5;
     let kbdY = 0.5;

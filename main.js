@@ -1,13 +1,16 @@
 "use strict";
 
+const FADE_SECONDS = 0.01;
+
 let audioCtx = new AudioContext();
 let source = audioCtx.createBufferSource();
 let scriptNode = audioCtx.createScriptProcessor(1024, 1, 1);
+let fader = new Fader(audioCtx.sampleRate, FADE_SECONDS);
+let faderSignal = fader.signal();
 let triangleWave = new TriangleWave(audioCtx.sampleRate);
 let pulseWave = new PulseWave(audioCtx.sampleRate);
 let sineWave = new SineWave(audioCtx.sampleRate);
 let noise = new Noise();
-let currSignal = null;
 
 function bindDebouncedResize(cb) {
   const DELAY = 250;
@@ -61,12 +64,13 @@ function bindPad(el, source, cb) {
   }
 
   function activate() {
-    currSignal = source.signal();
+    fader.source = source;
+    fader.fadeIn();
     el.classList.add('active');
   }
 
   function deactivate() {
-    currSignal = null;
+    fader.fadeOut();
     el.classList.remove('active');
   }
 
@@ -176,11 +180,7 @@ scriptNode.onaudioprocess = e => {
     let data = e.outputBuffer.getChannelData(chan);
 
     for (let i = 0; i < e.outputBuffer.length; i++) {
-      if (currSignal) {
-        data[i] = currSignal.next().value;
-      } else {
-        data[i] = 0;
-      }
+      data[i] = faderSignal.next().value;
     }
   }
 };

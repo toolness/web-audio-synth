@@ -15,6 +15,7 @@ h1, h2 {
   position: relative;
   background: #f0f0f0;
   color: darkgray;
+  transition: color 0.15s;
   padding: 4em;
   margin-bottom: 2.5em;
   cursor: pointer;
@@ -24,6 +25,10 @@ h1, h2 {
   -ms-user-select: none;       /* Internet Explorer/Edge */
   user-select: none;           /* Non-prefixed version, currently
                                   not supported by any browser */
+}
+
+.pad.active {
+  color: #111111;
 }
 
 .pad:not(.active) .info, .pad:not(.active) svg {
@@ -50,7 +55,7 @@ h1, h2 {
 }
 
 p {
-  transition: opacity 0.15s;
+  transition: opacity 0.15s, color 0.15s;
   font-weight: 100;
 }
 

@@ -10,7 +10,7 @@ let faderSignal = fader.signal();
 let triangleWave = new TriangleWave(audioCtx.sampleRate);
 let pulseWave = new PulseWave(audioCtx.sampleRate);
 let sineWave = new SineWave(audioCtx.sampleRate);
-let noise = new Noise();
+let noise = new Noise(audioCtx.sampleRate);
 
 function bindDebouncedResize(cb) {
   const DELAY = 250;
@@ -209,4 +209,8 @@ bindPad(document.getElementById('sine'), sineWave, (x, y) => {
   return sineWave.freq + " hz";
 });
 
-bindPad(document.getElementById('noise'), noise);
+bindPad(document.getElementById('noise'), noise, (x, y) => {
+  noise.freq = Math.floor(1 + (x * 80));
+
+  return noise.freq + " hz";
+});

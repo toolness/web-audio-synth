@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<link href="https://fonts.googleapis.com/css?family=Lato:400,300,700,900" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Lato:400,300,700,900"
+      rel="stylesheet">
 <link href="style.css" rel="stylesheet">
 <title>web audio fun</title>
 <h1>web audio fun</h1>
@@ -21,7 +22,8 @@
   </p>
 </div>
 <p>
-  For more details, check out the <a href="http://github.com/toolness/web-audio-synth">GitHub repository</a>.
+  For more details, check out the
+  <a href="http://github.com/toolness/web-audio-synth">GitHub repository</a>.
 </p>
 </div>
 
@@ -59,6 +61,9 @@ window.onerror = function() {
 <script src="noise.js"></script>
 <script src="main.js"></script>
 <script>
+// If errors happened during loading our scripts, it's likely because
+// the browser doesn't support ES2015 or some other required feature,
+// so show the warning.
 if (errorCount) {
   document.getElementById('fail').className = 'active';
 }

@@ -9,6 +9,17 @@ let sineWave = new SineWave(audioCtx.sampleRate);
 let noise = new Noise();
 let currSignal = null;
 
+function bindDebouncedResize(cb) {
+  const DELAY = 250;
+  let timeout;
+
+  window.addEventListener('resize', () => {
+    clearTimeout(timeout);
+
+    timeout = setTimeout(cb, DELAY);
+  }, false);
+}
+
 function bindPad(el, source, cb) {
   let isDown = false;
   let info = el.querySelector('.info');
@@ -70,6 +81,8 @@ function bindPad(el, source, cb) {
     isDown = false;
     el.classList.remove('active');
   }, false);
+
+  bindDebouncedResize(draw);
 
   window.addEventListener('load', draw, false);
 }

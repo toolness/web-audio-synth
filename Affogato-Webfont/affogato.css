@@ -1,0 +1,54 @@
+/* ------------------------------------------------*/
+/*   			AFFOGATO FONT FILES   	   		   */
+/*        	BASIC @FONT-FACE STUFF HERE     	   */
+/* ------------------------------------------------*/
+
+@font-face {
+    font-family: 'Affogato';
+    src: url('webfont/Affogato-Black.eot');
+    src: url('webfont/Affogato-Black.eot?#iefix') format('embedded-opentype'),
+    	 url('webfont/Affogato-Black.woff') format('woff'),
+         url('webfont/Affogato-Black.woff2') format('woff2'),
+         url('webfont/Affogato-Black.ttf')  format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Affogato';
+    src: url('webfont/Affogato-Bold.eot');
+    src: url('webfont/Affogato-Bold.eot?#iefix') format('embedded-opentype'),
+    	 url('webfont/Affogato-Bold.woff') format('woff'),
+         url('webfont/Affogato-Bold.woff2') format('woff2'),
+         url('webfont/Affogato-Bold.ttf')  format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Affogato';
+    src: url('webfont/Affogato-Medium.eot');
+    src: url('webfont/Affogato-Medium.eot?#iefix') format('embedded-opentype'),
+    	 url('webfont/Affogato-Medium.woff') format('woff'),
+         url('webfont/Affogato-Medium.woff2') format('woff2'),
+         url('webfont/Affogato-Medium.ttf')  format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Affogato';
+    src: url('webfont/Affogato-Regular.eot');
+    src: url('webfont/Affogato-Regular.eot?#iefix') format('embedded-opentype'),
+    	 url('webfont/Affogato-Regular.woff') format('woff'),
+         url('webfont/Affogato-Regular.woff2') format('woff2'),
+         url('webfont/Affogato-Regular.ttf')  format('truetype');
+    font-weight: 400;
+}
+@font-face {
+    font-family: 'Affogato';
+    src: url('webfont/Affogato-Light.eot');
+    src: url('webfont/Affogato-Light.eot?#iefix') format('embedded-opentype'),
+    	 url('webfont/Affogato-Light.woff') format('woff'),
+         url('webfont/Affogato-Light.woff2') format('woff2'),
+         url('webfont/Affogato-Light.ttf')  format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}

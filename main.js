@@ -69,6 +69,8 @@ function bindPad(el, source, cb) {
     isDown = false;
     el.classList.remove('active');
   }, false);
+
+  window.addEventListener('load', draw, false);
 }
 
 source.connect(scriptNode);

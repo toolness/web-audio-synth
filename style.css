@@ -10,8 +10,6 @@ h1, h2 {
 .pad {
   position: relative;
   background: #f0f0f0;
-  color: darkgray;
-  transition: color 0.15s;
   padding: 5em 4em 4em 4em;
   margin-bottom: 2.5em;
   cursor: pointer;
@@ -23,16 +21,11 @@ h1, h2 {
                                   not supported by any browser */
 }
 
-.pad.active {
-  color: #111111;
-}
-
-.pad:not(.active) .info, .pad:not(.active) svg {
+.pad:not(.active) .info {
   opacity: 0;
 }
 
 .pad svg {
-  transition: opacity 0.15s;
   position: absolute;
   top: 0;
   left: 0;
@@ -51,7 +44,7 @@ h1, h2 {
 }
 
 p {
-  transition: opacity 0.15s, color 0.15s;
+  transition: opacity 0.5s;
   font-weight: 100;
 }
 

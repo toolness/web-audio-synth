@@ -17,6 +17,7 @@ function bindPad(el, source, cb) {
   cb = cb || function() {};
 
   function draw() {
+    const V_MARGIN = 0.1;
     let me = el.getBoundingClientRect();
     let width = me.width;
     let height = me.height;
@@ -30,7 +31,7 @@ function bindPad(el, source, cb) {
     for (let i = 0; i < width; i += 1) {
       let value = signal.next().value;
 
-      value = height - (value * (height / 2) + (height / 2));
+      value = height - (value * (height / (2 + V_MARGIN)) + (height / 2));
       segments.push((i == 0 ? "M " : "L ") + i + " " + value);
     }
 

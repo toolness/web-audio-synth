@@ -86,6 +86,28 @@ function bindPad(el, source, cb) {
     notify(myX / me.width, myY / me.height);
   }
 
+  function notifyTouch(e) {
+    if (!e.changedTouches) return;
+
+    notifyMouse({
+      clientX: e.changedTouches[0].clientX,
+      clientY: e.changedTouches[0].clientY
+    });
+  }
+
+  el.ontouchstart = e => {
+    activate();
+    notifyTouch(e);
+  };
+
+  el.ontouchmove = e => {
+    notifyTouch(e);
+  };
+
+  el.ontouchend = el.ontouchcancel = e => {
+    deactivate();
+  };
+
   el.onmousedown = e => {
     isMouseDown = true;
     activate();

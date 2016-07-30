@@ -49,13 +49,36 @@ h1, h2 {
   z-index: 1;
 }
 
-.info {
+p {
   transition: opacity 0.15s;
   font-weight: 100;
+}
+
+.container {
+  max-width: 20em;
+  margin: 0 auto;
+}
+
+a {
+  color: inherit;
 }
 </style>
 <title>web audio fun</title>
 <h1>web audio fun</h1>
+
+<div class="container">
+<p>
+  This is my attempt to learn about audio synthesis by generating
+  waveforms in the browser.
+</p>
+<p>
+  This experiment uses ES2015 without a transpiler, so it probably
+  won't work unless your browser is really awesome.
+</p>
+<p>
+  For more details, check out the <a href="http://github.com/toolness/web-audio-synth">GitHub repository</a>.
+</p>
+</div>
 
 <div id="pulse" class="pad">
   <svg><path d=""/></svg>

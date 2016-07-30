@@ -109,6 +109,7 @@ function bindPad(el, source, cb) {
     const RIGHT_ARROW = 39;
     const DOWN_ARROW = 40;
     const KBD_INCREMENT = 0.01;
+    const KBD_BIG_INCREMENT = 0.05;
 
     let isKbdDown = false;
     let kbdX = 0.5;
@@ -146,17 +147,19 @@ function bindPad(el, source, cb) {
     button.onkeydown = e => {
       if (!isKbdDown) return;
 
+      let increment = e.shiftKey ? KBD_BIG_INCREMENT : KBD_INCREMENT;
+
       if (e.keyCode === LEFT_ARROW) {
-        kbdX -= KBD_INCREMENT;
+        kbdX -= increment;
         if (kbdX < 0) kbdX = 0;
       } else if (e.keyCode === UP_ARROW) {
-        kbdY -= KBD_INCREMENT;
+        kbdY -= increment;
         if (kbdY < 0) kbdY = 0;
       } else if (e.keyCode === RIGHT_ARROW) {
-        kbdX += KBD_INCREMENT;
+        kbdX += increment;
         if (kbdX > 1.0) kbdX = 1.0;
       } else if (e.keyCode === DOWN_ARROW) {
-        kbdY += KBD_INCREMENT;
+        kbdY += increment;
         if (kbdY > 1.0) kbdY = 1.0;
       } else {
         return;

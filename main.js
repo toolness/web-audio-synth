@@ -9,8 +9,10 @@ let fader = new Fader(audioCtx.sampleRate, FADE_SECONDS);
 let faderSignal = fader.signal();
 let triangleWave = new TriangleWave(audioCtx.sampleRate);
 let pulseWave = new PulseWave(audioCtx.sampleRate);
+let quietPulseWave = new Amplifier(pulseWave, 0.5);
 let sineWave = new SineWave(audioCtx.sampleRate);
 let noise = new Noise();
+let quietNoise = new Amplifier(noise, 0.5);
 
 function bindDebouncedResize(cb) {
   const DELAY = 250;
@@ -191,7 +193,7 @@ scriptNode.onaudioprocess = e => {
   }
 };
 
-bindPad(document.getElementById('pulse'), pulseWave, (x, y) => {
+bindPad(document.getElementById('pulse'), quietPulseWave, (x, y) => {
   pulseWave.freq = Math.floor(20 + (x * 800));
   pulseWave.dutyCycle = y;
 
@@ -212,4 +214,4 @@ bindPad(document.getElementById('sine'), sineWave, (x, y) => {
   return sineWave.freq + " hz";
 });
 
-bindPad(document.getElementById('noise'), noise);
+bindPad(document.getElementById('noise'), quietNoise);

@@ -3,7 +3,8 @@
 const FADE_SECONDS = 0.01;
 
 let audioCtx = new AudioContext();
-let source = audioCtx.createBufferSource();
+let bufferSource = audioCtx.createBufferSource();
+let bufferSourceStarted = false;
 let scriptNode = audioCtx.createScriptProcessor(1024, 1, 1);
 let fader = new Fader(audioCtx.sampleRate, FADE_SECONDS);
 let faderSignal = fader.signal();
@@ -68,6 +69,10 @@ function bindPad(el, source, cb) {
   }
 
   function activate() {
+    if (!bufferSourceStarted) {
+      bufferSource.start();
+      bufferSourceStarted = true;
+    }
     fader.source = source;
     fader.fadeIn();
     el.classList.add('active');
@@ -199,9 +204,8 @@ function bindPad(el, source, cb) {
   window.addEventListener('load', draw, false);
 }
 
-source.connect(scriptNode);
+bufferSource.connect(scriptNode);
 scriptNode.connect(audioCtx.destination);
-source.start();
 
 scriptNode.onaudioprocess = e => {
   let outputBuffer = e.outputBuffer;

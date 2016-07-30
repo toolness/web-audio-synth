@@ -17,6 +17,7 @@ h2 {
   padding: 5em 4em 4em 4em;
   margin-bottom: 2.5em;
   cursor: pointer;
+  overflow: hidden;
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none;   /* Chrome/Safari/Opera */
   -moz-user-select: none;      /* Firefox */

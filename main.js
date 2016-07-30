@@ -21,9 +21,10 @@ function bindDebouncedResize(cb) {
 }
 
 function bindPad(el, source, cb) {
-  let isDown = false;
+  let isMouseDown = false;
   let info = el.querySelector('.info');
   let svg = el.querySelector('svg');
+  let button = el.querySelector('button');
 
   cb = cb || function() {};
 
@@ -49,11 +50,8 @@ function bindPad(el, source, cb) {
     path.setAttribute('d', segments.join(' '));
   }
 
-  function notify(e) {
-    let me = el.getBoundingClientRect();
-    let myX = e.clientX - me.left;
-    let myY = e.clientY - me.top;
-    let desc = cb(myX / me.width, myY / me.height);
+  function notify(x, y) {
+    let desc = cb(x, y);
 
     if (info && desc) {
       info.textContent = desc;
@@ -62,25 +60,105 @@ function bindPad(el, source, cb) {
     draw();
   }
 
-  el.onmousedown = e => {
-    isDown = true;
+  function activate() {
     currSignal = source.signal();
-    notify(e);
     el.classList.add('active');
+  }
+
+  function deactivate() {
+    currSignal = null;
+    el.classList.remove('active');
+  }
+
+  function notifyMouse(e) {
+    let me = el.getBoundingClientRect();
+    let myX = e.clientX - me.left;
+    let myY = e.clientY - me.top;
+
+    notify(myX / me.width, myY / me.height);
+  }
+
+  el.onmousedown = e => {
+    isMouseDown = true;
+    activate();
+    notifyMouse(e);
   };
 
   el.onmousemove = e => {
-    if (!isDown) return;
+    if (!isMouseDown) return;
 
-    notify(e);
+    notifyMouse(e);
   };
 
   document.documentElement.addEventListener('mouseup', e => {
-    if (!isDown) return;
+    if (!isMouseDown) return;
 
-    isDown = false;
-    el.classList.remove('active');
+    isMouseDown = false;
+    deactivate();
   }, false);
+
+  if (button) {
+    const LEFT_ARROW = 37;
+    const UP_ARROW = 38;
+    const RIGHT_ARROW = 39;
+    const DOWN_ARROW = 40;
+    const KBD_INCREMENT = 0.01;
+    let isKbdDown = false;
+    let kbdX = 0.5;
+    let kbdY = 0.5;
+    let notifyKbd = () => {
+      notify(kbdX, kbdY);
+    };
+
+    button.onclick = e => {
+      if (isKbdDown) {
+        isKbdDown = false;
+        deactivate();
+      } else {
+        isKbdDown = true;
+        activate();
+        notifyKbd();
+      }
+    };
+
+    button.onfocus = e => {
+      if (button.scrollIntoViewIfNeeded) {
+        button.scrollIntoViewIfNeeded();
+      } else {
+        button.scrollIntoView();
+      }
+    };
+
+    button.onblur = e => {
+      if (isKbdDown) {
+        isKbdDown = false;
+        deactivate();
+      }
+    };
+
+    button.onkeydown = e => {
+      if (!isKbdDown) return;
+
+      if (e.keyCode === LEFT_ARROW) {
+        kbdX -= KBD_INCREMENT;
+        if (kbdX < 0) kbdX = 0;
+      } else if (e.keyCode === UP_ARROW) {
+        kbdY -= KBD_INCREMENT;
+        if (kbdY < 0) kbdY = 0;
+      } else if (e.keyCode === RIGHT_ARROW) {
+        kbdX += KBD_INCREMENT;
+        if (kbdX > 1.0) kbdX = 1.0;
+      } else if (e.keyCode === DOWN_ARROW) {
+        kbdY += KBD_INCREMENT;
+        if (kbdY > 1.0) kbdY = 1.0;
+      } else {
+        return;
+      }
+
+      notifyKbd();
+      e.preventDefault();
+    };
+  }
 
   bindDebouncedResize(draw);
 
@@ -105,10 +183,6 @@ scriptNode.onaudioprocess = e => {
       }
     }
   }
-};
-
-document.documentElement.onmouseup = () => {
-  currSignal = null;
 };
 
 bindPad(document.getElementById('pulse'), pulseWave, (x, y) => {

@@ -70,3 +70,32 @@ a {
 #fail:not(.active) {
   display:none;
 }
+
+.pad button {
+  position:absolute;
+  left:-10000px;
+  top:auto;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 8px;
+  border: none;
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+}
+
+.pad button:focus {
+  left: 8px;
+  top: 8px;
+  width: auto;
+  max-width: 20em;
+  text-align: left;
+  height: auto;
+}

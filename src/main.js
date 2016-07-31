@@ -1,5 +1,7 @@
 "use strict";
 
+/* global Fader, TriangleWave, PulseWave, Amplifier, SineWave, Noise */
+
 const FADE_SECONDS = 0.01;
 
 let audioCtx = new AudioContext();

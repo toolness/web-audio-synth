@@ -6,12 +6,14 @@
   "dependencies": {
   },
   "devDependencies": {
+    "eslint": "3.2.0",
     "babel-cli": "^6.11.4",
     "babel-polyfill": "^6.9.1",
     "babel-preset-es2015": "^6.9.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src",
     "copy-polyfill": "cp node_modules/babel-polyfill/dist/polyfill.js vendor/babel-polyfill.js",
     "build": "npm run copy-polyfill && babel src -d transpiled"
   },

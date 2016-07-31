@@ -72,7 +72,7 @@ a {
   color: red;
 }
 
-#fail:not(.active) {
+html:not(.no-web-audio) #fail {
   display:none;
 }
 

@@ -134,91 +134,17 @@
   </p>
 </footer>
 
-<script id="es2015-test" type="text/plain">
-// This code will either parse and run if the browser supports all the
-// features of es2015 we need to run our non-transpiled code, or it will
-// raise a syntax error or return something other than "es2015 works!".
-
-(function() {
-  function *boop() {
-    yield 1;
-  }
-
-  const BOOP = 1;
-
-  let tryMe = () => {};
-
-  class Glorp {
-  }
-
-  return "es2015 works!";
-})();
-</script>
-
+<script src="loader.js"></script>
 <script>
-"use strict";
-
-(function() {
-  var files = [
-    "signals/amplifier.js",
-    "signals/fader.js",
-    "signals/pulse-wave.js",
-    "signals/triangle-wave.js",
-    "signals/sine-wave.js",
-    "signals/noise.js",
-    "engine.js",
-    "pad.js",
-    "main.js"
-  ];
-  var html = '';
-
-  function doesBrowserSupportWebAudio() {
-    if (!('AudioContext' in window)) {
-      if ('webkitAudioContext' in window) {
-        window.AudioContext = window.webkitAudioContext;
-      }
-    }
-
-    return 'AudioContext' in window;
-  }
-
-  function isTranspilerNeeded() {
-    var es2015 = document.getElementById('es2015-test').textContent;
-    var result;
-
-    try {
-      result = eval(es2015);
-      if (result != "es2015 works!") {
-        throw new Error("es2015 test returned " + result);
-      }
-      return false;
-    } catch (e) {
-      console.log("es2015 test failed.", e);
-      return true;
-    }
-  }
-
-  if (!doesBrowserSupportWebAudio()) {
-    document.getElementById('fail').className = 'active';
-    return;
-  }
-
-  if (isTranspilerNeeded()) {
-    files = [
-      'vendor/babel-polyfill.js'
-    ].concat(files.map(function(file) {
-      return 'transpiled/' + file;
-    }));
-  } else {
-    files = files.map(function(file) {
-      return 'src/' + file;
-    });
-  }
-
-  html = files.map(function(file) {
-    return '<script src="' + file + '"></' + 'script>';
-  }).join('\n');
-
-  document.write(html);
-})();
+Loader.load([
+  "signals/amplifier.js",
+  "signals/fader.js",
+  "signals/pulse-wave.js",
+  "signals/triangle-wave.js",
+  "signals/sine-wave.js",
+  "signals/noise.js",
+  "engine.js",
+  "pad.js",
+  "main.js"
+]);
 </script>

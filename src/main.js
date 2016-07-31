@@ -1,19 +1,16 @@
 "use strict";
 
-/* global Fader, TriangleWave, PulseWave, Amplifier, SineWave, Noise */
+/* global Fader, TriangleWave, PulseWave, Amplifier, SineWave, Noise,
+ *        AudioEngine */
 
 const FADE_SECONDS = 0.01;
 
-let audioCtx = new AudioContext();
-let bufferSource = audioCtx.createBufferSource();
-let bufferSourceStarted = false;
-let scriptNode = audioCtx.createScriptProcessor(1024, 1, 1);
-let fader = new Fader(audioCtx.sampleRate, FADE_SECONDS);
-let faderSignal = fader.signal();
-let triangleWave = new TriangleWave(audioCtx.sampleRate);
-let pulseWave = new PulseWave(audioCtx.sampleRate);
+let engine = new AudioEngine();
+let fader = new Fader(engine.sampleRate, FADE_SECONDS);
+let triangleWave = new TriangleWave(engine.sampleRate);
+let pulseWave = new PulseWave(engine.sampleRate);
 let quietPulseWave = new Amplifier(pulseWave, 0.5);
-let sineWave = new SineWave(audioCtx.sampleRate);
+let sineWave = new SineWave(engine.sampleRate);
 let noise = new Noise();
 let quietNoise = new Amplifier(noise, 0.5);
 
@@ -71,10 +68,7 @@ function bindPad(el, source, cb) {
   }
 
   function activate() {
-    if (!bufferSourceStarted) {
-      bufferSource.start();
-      bufferSourceStarted = true;
-    }
+    engine.activate(fader);
     fader.source = source;
     fader.fadeIn();
     el.classList.add('active');
@@ -205,21 +199,6 @@ function bindPad(el, source, cb) {
 
   window.addEventListener('load', draw, false);
 }
-
-bufferSource.connect(scriptNode);
-scriptNode.connect(audioCtx.destination);
-
-scriptNode.onaudioprocess = e => {
-  let outputBuffer = e.outputBuffer;
-
-  for (let chan = 0; chan < e.outputBuffer.numberOfChannels; chan++) {
-    let data = e.outputBuffer.getChannelData(chan);
-
-    for (let i = 0; i < e.outputBuffer.length; i++) {
-      data[i] = faderSignal.next().value;
-    }
-  }
-};
 
 bindPad(document.getElementById('pulse'), quietPulseWave, (x, y) => {
   pulseWave.freq = Math.floor(20 + (x * 800));

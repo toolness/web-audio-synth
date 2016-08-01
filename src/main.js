@@ -1,7 +1,7 @@
 "use strict";
 
 /* global TriangleWave, PulseWave, Amplifier, SineWave, Noise,
- *        AudioEngine, Pad */
+ *        AudioEngine, Pad, LowPassFilter */
 
 let engine = new AudioEngine();
 let triangleWave = new TriangleWave(engine.sampleRate);

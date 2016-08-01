@@ -120,12 +120,22 @@
 
 <div class="container">
   <p>
-    I am befuddled by noise.
-  </p>
-  <p>
-    As far as I can tell, noise has no "frequency", it's just a bunch
+    Noise has no intrinsic "frequency", it's just a bunch
     of random numbers. And yet the noise generator in the NES
     somehow supported 16 different frequencies.
+  </p>
+  <p>
+    I think this is because running the noise through a <em>filter</em> can
+    be used to effectively remove the higher or lower frequencies from
+    the noise.
+  </p>
+  <p>
+    The above pad uses something called a
+    <a href="http://www.embedded.com/design/configurable-systems/4025591/Digital-filtering-without-the-pain">FIR filter</a>
+    to remove higher frequencies from noise by effectively "blurring"
+    the audio samples using averaging. It probably isn't how the NES
+    achieved 16 different varieties of noise, but maybe the general
+    idea is similar.
   </p>
   <p>
     In any case, it looks like noise is mostly used to synthesize
@@ -144,6 +154,7 @@
 <script src="loader.js"></script>
 <script>
 Loader.load([
+  "signals/low-pass-filter.js",
   "signals/amplifier.js",
   "signals/fader.js",
   "signals/pulse-wave.js",

@@ -8,7 +8,7 @@ let triangleWave = new TriangleWave(engine.sampleRate);
 let pulseWave = new PulseWave(engine.sampleRate);
 let quietPulseWave = new Amplifier(pulseWave, 0.5);
 let sineWave = new SineWave(engine.sampleRate);
-let noise = new Noise();
+let noise = new LowPassFilter(new Noise());
 
 Pad.bind(engine, '#pulse', quietPulseWave, (x, y) => {
   pulseWave.freq = Math.floor(20 + (x * 800));
@@ -32,7 +32,7 @@ Pad.bind(engine, '#sine', sineWave, (x, y) => {
 });
 
 Pad.bind(engine, '#noise', noise, (x, y) => {
-  noise.numSamples = Math.floor(1 + (x * 100));
+  noise.samplesToAverage = Math.floor(1 + (x * 100));
 
-  return "averaged over " + noise.numSamples + " samples";
+  return "averaged over " + noise.samplesToAverage + " samples";
 });

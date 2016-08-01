@@ -8,7 +8,7 @@ let triangleWave = new TriangleWave(engine.sampleRate);
 let pulseWave = new PulseWave(engine.sampleRate);
 let quietPulseWave = new Amplifier(pulseWave, 0.5);
 let sineWave = new SineWave(engine.sampleRate);
-let noise = new Noise();
+let noise = new Noise(engine.sampleRate);
 let quietNoise = new Amplifier(noise, 0.5);
 
 Pad.bind(engine, '#pulse', quietPulseWave, (x, y) => {

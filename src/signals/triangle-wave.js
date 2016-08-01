@@ -20,34 +20,29 @@ class TriangleWave {
     this._slope = 2 / (period / 2);
   }
 
-  signal() {
+  *signal() {
     const SIGNAL_LOW = -1;
     const SIGNAL_HIGH = 1;
 
-    let self = this;
     let slope = this._slope;
     let signal = 0;
 
-    function *signalGenerator() {
-      while (true) {
-        yield signal;
+    while (true) {
+      yield signal;
 
-        signal += slope;
+      signal += slope;
 
-        if (slope > 0) {
-          if (signal >= SIGNAL_HIGH) {
-            signal = SIGNAL_HIGH;
-            slope = -self._slope;
-          }
-        } else {
-          if (signal <= SIGNAL_LOW) {
-            signal = SIGNAL_LOW;
-            slope = self._slope;
-          }
+      if (slope > 0) {
+        if (signal >= SIGNAL_HIGH) {
+          signal = SIGNAL_HIGH;
+          slope = -this._slope;
+        }
+      } else {
+        if (signal <= SIGNAL_LOW) {
+          signal = SIGNAL_LOW;
+          slope = this._slope;
         }
       }
     }
-
-    return signalGenerator();
   };
 }

@@ -22,35 +22,29 @@ class Fader {
     this._fadeSlope = -this._baseFadeSlope;
   }
 
-  signal() {
-    let self = this;
+  *signal() {
+    while (true) {
+      if (this._sourceSignal) {
+        if (this._fade) {
+          let value = this._sourceSignal.next().value;
 
-    function *signalGenerator() {
-      while (true) {
-        if (self._sourceSignal) {
-          if (self._fade) {
-            let value = self._sourceSignal.next().value;
-
-            yield value * self._fade;
-          } else {
-            yield 0;
-          }
+          yield value * this._fade;
         } else {
           yield 0;
         }
+      } else {
+        yield 0;
+      }
 
-        self._fade += self._fadeSlope;
+      this._fade += this._fadeSlope;
 
-        if (self._fade < 0) {
-          self._fade = 0;
-          self._fadeSlope = 0;
-        } else if (self._fade > 1) {
-          self._fade = 1;
-          self._fadeSlope = 0;
-        }
+      if (this._fade < 0) {
+        this._fade = 0;
+        this._fadeSlope = 0;
+      } else if (this._fade > 1) {
+        this._fade = 1;
+        this._fadeSlope = 0;
       }
     }
-
-    return signalGenerator();
   }
 }

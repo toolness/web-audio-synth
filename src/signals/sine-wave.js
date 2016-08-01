@@ -12,19 +12,13 @@ class SineWave {
     return this._freq;
   }
 
-  signal() {
-    let self = this;
+  *signal() {
+    while (true) {
+      let period = Math.floor(this.sampleRate / this._freq);
 
-    function *signalGenerator() {
-      while (true) {
-        let period = Math.floor(self.sampleRate / self._freq);
-
-        for (let i = 0; i < period; i++) {
-          yield Math.sin(i * 2 * Math.PI / period);
-        }
+      for (let i = 0; i < period; i++) {
+        yield Math.sin(i * 2 * Math.PI / period);
       }
     }
-
-    return signalGenerator();
-  };
+  }
 }

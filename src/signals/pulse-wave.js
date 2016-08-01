@@ -31,31 +31,26 @@ class PulseWave {
     this._lowSamplesPerPeriod = period - this._highSamplesPerPeriod;
   }
 
-  signal() {
+  *signal() {
     const SIGNAL_LOW = -1;
     const SIGNAL_HIGH = 1;
 
-    let self = this;
     let signal = SIGNAL_LOW;
-    let samplesUntilSignalFlip = self._lowSamplesPerPeriod;
+    let samplesUntilSignalFlip = this._lowSamplesPerPeriod;
 
-    function *signalGenerator() {
-      while (true) {
-        if (samplesUntilSignalFlip == 0) {
-          if (signal === SIGNAL_LOW) {
-            signal = SIGNAL_HIGH;
-            samplesUntilSignalFlip = self._highSamplesPerPeriod;
-          } else {
-            signal = SIGNAL_LOW;
-            samplesUntilSignalFlip = self._lowSamplesPerPeriod;
-          }
+    while (true) {
+      if (samplesUntilSignalFlip == 0) {
+        if (signal === SIGNAL_LOW) {
+          signal = SIGNAL_HIGH;
+          samplesUntilSignalFlip = this._highSamplesPerPeriod;
         } else {
-          samplesUntilSignalFlip--;
+          signal = SIGNAL_LOW;
+          samplesUntilSignalFlip = this._lowSamplesPerPeriod;
         }
-        yield signal;
+      } else {
+        samplesUntilSignalFlip--;
       }
+      yield signal;
     }
-
-    return signalGenerator();
   };
 }

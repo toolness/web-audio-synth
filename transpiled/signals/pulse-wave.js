@@ -24,54 +24,48 @@ var PulseWave = function () {
     }
   }, {
     key: "signal",
-    value: function signal() {
-      var _marked = [signalGenerator].map(regeneratorRuntime.mark);
+    value: regeneratorRuntime.mark(function signal() {
+      var SIGNAL_LOW, SIGNAL_HIGH, signal, samplesUntilSignalFlip;
+      return regeneratorRuntime.wrap(function signal$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              SIGNAL_LOW = -1;
+              SIGNAL_HIGH = 1;
+              signal = SIGNAL_LOW;
+              samplesUntilSignalFlip = this._lowSamplesPerPeriod;
 
-      var SIGNAL_LOW = -1;
-      var SIGNAL_HIGH = 1;
-
-      var self = this;
-      var signal = SIGNAL_LOW;
-      var samplesUntilSignalFlip = self._lowSamplesPerPeriod;
-
-      function signalGenerator() {
-        return regeneratorRuntime.wrap(function signalGenerator$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!true) {
-                  _context.next = 6;
-                  break;
-                }
-
-                if (samplesUntilSignalFlip == 0) {
-                  if (signal === SIGNAL_LOW) {
-                    signal = SIGNAL_HIGH;
-                    samplesUntilSignalFlip = self._highSamplesPerPeriod;
-                  } else {
-                    signal = SIGNAL_LOW;
-                    samplesUntilSignalFlip = self._lowSamplesPerPeriod;
-                  }
-                } else {
-                  samplesUntilSignalFlip--;
-                }
-                _context.next = 4;
-                return signal;
-
-              case 4:
-                _context.next = 0;
+            case 4:
+              if (!true) {
+                _context.next = 10;
                 break;
+              }
 
-              case 6:
-              case "end":
-                return _context.stop();
-            }
+              if (samplesUntilSignalFlip == 0) {
+                if (signal === SIGNAL_LOW) {
+                  signal = SIGNAL_HIGH;
+                  samplesUntilSignalFlip = this._highSamplesPerPeriod;
+                } else {
+                  signal = SIGNAL_LOW;
+                  samplesUntilSignalFlip = this._lowSamplesPerPeriod;
+                }
+              } else {
+                samplesUntilSignalFlip--;
+              }
+              _context.next = 8;
+              return signal;
+
+            case 8:
+              _context.next = 4;
+              break;
+
+            case 10:
+            case "end":
+              return _context.stop();
           }
-        }, _marked[0], this);
-      }
-
-      return signalGenerator();
-    }
+        }
+      }, signal, this);
+    })
   }, {
     key: "freq",
     set: function set(hz) {

@@ -14,41 +14,35 @@ var Amplifier = function () {
 
   _createClass(Amplifier, [{
     key: "signal",
-    value: function signal() {
-      var _marked = [signalGenerator].map(regeneratorRuntime.mark);
+    value: regeneratorRuntime.mark(function signal() {
+      var sourceSignal, value;
+      return regeneratorRuntime.wrap(function signal$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              sourceSignal = this._source.signal();
 
-      var self = this;
-      var sourceSignal = this._source.signal();
-
-      function signalGenerator() {
-        var value;
-        return regeneratorRuntime.wrap(function signalGenerator$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!true) {
-                  _context.next = 6;
-                  break;
-                }
-
-                value = sourceSignal.next().value * self.amount;
-                _context.next = 4;
-                return value;
-
-              case 4:
-                _context.next = 0;
+            case 1:
+              if (!true) {
+                _context.next = 7;
                 break;
+              }
 
-              case 6:
-              case "end":
-                return _context.stop();
-            }
+              value = sourceSignal.next().value * this.amount;
+              _context.next = 5;
+              return value;
+
+            case 5:
+              _context.next = 1;
+              break;
+
+            case 7:
+            case "end":
+              return _context.stop();
           }
-        }, _marked[0], this);
-      }
-
-      return signalGenerator();
-    }
+        }
+      }, signal, this);
+    })
   }]);
 
   return Amplifier;

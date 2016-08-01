@@ -11,36 +11,30 @@ var Noise = function () {
 
   _createClass(Noise, [{
     key: "signal",
-    value: function signal() {
-      var _marked = [signalGenerator].map(regeneratorRuntime.mark);
-
-      function signalGenerator() {
-        return regeneratorRuntime.wrap(function signalGenerator$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!true) {
-                  _context.next = 5;
-                  break;
-                }
-
-                _context.next = 3;
-                return Math.random() * 2 - 1;
-
-              case 3:
-                _context.next = 0;
+    value: regeneratorRuntime.mark(function signal() {
+      return regeneratorRuntime.wrap(function signal$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              if (!true) {
+                _context.next = 5;
                 break;
+              }
 
-              case 5:
-              case "end":
-                return _context.stop();
-            }
+              _context.next = 3;
+              return Math.random() * 2 - 1;
+
+            case 3:
+              _context.next = 0;
+              break;
+
+            case 5:
+            case "end":
+              return _context.stop();
           }
-        }, _marked[0], this);
-      }
-
-      return signalGenerator();
-    }
+        }
+      }, signal, this);
+    })
   }]);
 
   return Noise;

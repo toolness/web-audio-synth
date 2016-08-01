@@ -4,64 +4,52 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var SineWave = function () {
-  function SineWave(sampleRate) {
-    _classCallCheck(this, SineWave);
+var LowPassFilter = function () {
+  function LowPassFilter(source, samplesToAverage) {
+    _classCallCheck(this, LowPassFilter);
 
-    this.sampleRate = sampleRate;
-    this._freq = 220;
+    this._source = source;
+    this.samplesToAverage = samplesToAverage || 1;
   }
 
-  _createClass(SineWave, [{
+  _createClass(LowPassFilter, [{
     key: "signal",
     value: regeneratorRuntime.mark(function signal() {
-      var period, i;
+      var samples, sourceSignal;
       return regeneratorRuntime.wrap(function signal$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              samples = [];
+              sourceSignal = this._source.signal();
+
+            case 2:
               if (!true) {
-                _context.next = 11;
-                break;
-              }
-
-              period = Math.floor(this.sampleRate / this._freq);
-              i = 0;
-
-            case 3:
-              if (!(i < period)) {
                 _context.next = 9;
                 break;
               }
 
-              _context.next = 6;
-              return Math.sin(i * 2 * Math.PI / period);
+              samples.push(sourceSignal.next().value);
+              if (samples.length > this.samplesToAverage) {
+                samples.splice(0, samples.length - this.samplesToAverage);
+              }
+              _context.next = 7;
+              return samples.reduce(function (sum, current) {
+                return sum + current;
+              }, 0) / samples.length;
 
-            case 6:
-              i++;
-              _context.next = 3;
+            case 7:
+              _context.next = 2;
               break;
 
             case 9:
-              _context.next = 0;
-              break;
-
-            case 11:
             case "end":
               return _context.stop();
           }
         }
       }, signal, this);
     })
-  }, {
-    key: "freq",
-    set: function set(hz) {
-      this._freq = hz;
-    },
-    get: function get() {
-      return this._freq;
-    }
   }]);
 
-  return SineWave;
+  return LowPassFilter;
 }();

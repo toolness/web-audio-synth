@@ -1,15 +1,14 @@
 "use strict";
 
 /* global TriangleWave, PulseWave, Amplifier, SineWave, Noise,
- *        AudioEngine, Pad */
+ *        AudioEngine, Pad, LowPassFilter */
 
 var engine = new AudioEngine();
 var triangleWave = new TriangleWave(engine.sampleRate);
 var pulseWave = new PulseWave(engine.sampleRate);
 var quietPulseWave = new Amplifier(pulseWave, 0.5);
 var sineWave = new SineWave(engine.sampleRate);
-var noise = new Noise();
-var quietNoise = new Amplifier(noise, 0.5);
+var noise = new LowPassFilter(new Noise());
 
 Pad.bind(engine, '#pulse', quietPulseWave, function (x, y) {
   pulseWave.freq = Math.floor(20 + x * 800);
@@ -32,4 +31,8 @@ Pad.bind(engine, '#sine', sineWave, function (x, y) {
   return sineWave.freq + " hz";
 });
 
-Pad.bind(engine, '#noise', quietNoise);
+Pad.bind(engine, '#noise', noise, function (x, y) {
+  noise.samplesToAverage = Math.floor(1 + x * 100);
+
+  return "averaged over " + noise.samplesToAverage + " samples";
+});

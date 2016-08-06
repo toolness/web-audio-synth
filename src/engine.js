@@ -21,7 +21,7 @@ class AudioEngine {
   activate(source) {
     if (this._source !== source) {
       this._source = source;
-      this._sourceSignal = source.signal();
+      this._sourceSamples = source.samples();
     }
 
     if (!this._started) {
@@ -35,7 +35,7 @@ class AudioEngine {
   }
 
   _processAudio(e) {
-    if (!this._sourceSignal) return;
+    if (!this._sourceSamples) return;
 
     let outputBuffer = e.outputBuffer;
 
@@ -43,7 +43,7 @@ class AudioEngine {
       let data = e.outputBuffer.getChannelData(chan);
 
       for (let i = 0; i < e.outputBuffer.length; i++) {
-        data[i] = this._sourceSignal.next().value;
+        data[i] = this._sourceSamples.next().value;
       }
     }
   }

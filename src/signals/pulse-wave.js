@@ -31,7 +31,7 @@ class PulseWave {
     this._lowSamplesPerPeriod = period - this._highSamplesPerPeriod;
   }
 
-  *signal() {
+  *samples() {
     const SIGNAL_LOW = -1;
     const SIGNAL_HIGH = 1;
 

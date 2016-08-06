@@ -10,7 +10,7 @@ class Fader {
   set source(source) {
     if (source !== this._source) {
       this._source = source;
-      this._sourceSignal = source ? source.signal() : null;
+      this._sourceSamples = source ? source.samples() : null;
     }
   }
 
@@ -22,11 +22,11 @@ class Fader {
     this._fadeSlope = -this._baseFadeSlope;
   }
 
-  *signal() {
+  *samples() {
     while (true) {
-      if (this._sourceSignal) {
+      if (this._sourceSamples) {
         if (this._fade) {
-          let value = this._sourceSignal.next().value;
+          let value = this._sourceSamples.next().value;
 
           yield value * this._fade;
         } else {

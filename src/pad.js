@@ -38,7 +38,7 @@
       let me = el.getBoundingClientRect();
       let width = me.width;
       let height = me.height;
-      let signal = source.signal();
+      let samples = source.samples();
       let path = svg.querySelector('path');
       let segments = [];
 
@@ -46,7 +46,7 @@
       svg.setAttribute('height', height);
 
       for (let i = 0; i < width; i += 1) {
-        let value = signal.next().value;
+        let value = samples.next().value;
 
         value = height - (value * (height / (2 + V_MARGIN)) + (height / 2));
         segments.push((i == 0 ? "M " : "L ") + i + " " + value);

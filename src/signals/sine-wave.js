@@ -12,7 +12,7 @@ class SineWave {
     return this._freq;
   }
 
-  *signal() {
+  *samples() {
     while (true) {
       let period = Math.floor(this.sampleRate / this._freq);
 

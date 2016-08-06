@@ -4,11 +4,11 @@ class Amplifier {
     this._source = source;
   }
 
-  *signal() {
-    let sourceSignal = this._source.signal();
+  *samples() {
+    let sourceSamples = this._source.samples();
 
     while (true) {
-      let value = sourceSignal.next().value * this.amount;
+      let value = sourceSamples.next().value * this.amount;
       yield value;
     }
   }

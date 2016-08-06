@@ -4,12 +4,12 @@ class LowPassFilter {
     this.samplesToAverage = samplesToAverage || 1;
   }
 
-  *signal() {
+  *samples() {
     let samples = [];
-    let sourceSignal = this._source.signal();
+    let sourceSamples = this._source.samples();
 
     while (true) {
-      samples.push(sourceSignal.next().value);
+      samples.push(sourceSamples.next().value);
       if (samples.length > this.samplesToAverage) {
         samples.splice(0, samples.length - this.samplesToAverage);
       }

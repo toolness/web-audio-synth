@@ -20,7 +20,7 @@ class TriangleWave {
     this._slope = 2 / (period / 2);
   }
 
-  *signal() {
+  *samples() {
     const SIGNAL_LOW = -1;
     const SIGNAL_HIGH = 1;
 

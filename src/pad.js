@@ -13,6 +13,73 @@
     }, false);
   }
 
+  function bindKeyboard(button, notify, activate, deactivate) {
+    const LEFT_ARROW = 37;
+    const UP_ARROW = 38;
+    const RIGHT_ARROW = 39;
+    const DOWN_ARROW = 40;
+    const KBD_INCREMENT = 0.01;
+    const KBD_BIG_INCREMENT = 0.05;
+
+    let isKbdDown = false;
+    let kbdX = 0.5;
+    let kbdY = 0.5;
+    let notifyKbd = () => {
+      notify(kbdX, kbdY);
+    };
+
+    button.onclick = e => {
+      if (isKbdDown) {
+        isKbdDown = false;
+        deactivate();
+      } else {
+        isKbdDown = true;
+        activate();
+        notifyKbd();
+      }
+    };
+
+    button.onfocus = e => {
+      if (button.scrollIntoViewIfNeeded) {
+        button.scrollIntoViewIfNeeded();
+      } else {
+        button.scrollIntoView();
+      }
+    };
+
+    button.onblur = e => {
+      if (isKbdDown) {
+        isKbdDown = false;
+        deactivate();
+      }
+    };
+
+    button.onkeydown = e => {
+      if (!isKbdDown) return;
+
+      let increment = e.shiftKey ? KBD_BIG_INCREMENT : KBD_INCREMENT;
+
+      if (e.keyCode === LEFT_ARROW) {
+        kbdX -= increment;
+        if (kbdX < 0) kbdX = 0;
+      } else if (e.keyCode === UP_ARROW) {
+        kbdY -= increment;
+        if (kbdY < 0) kbdY = 0;
+      } else if (e.keyCode === RIGHT_ARROW) {
+        kbdX += increment;
+        if (kbdX > 1.0) kbdX = 1.0;
+      } else if (e.keyCode === DOWN_ARROW) {
+        kbdY += increment;
+        if (kbdY > 1.0) kbdY = 1.0;
+      } else {
+        return;
+      }
+
+      notifyKbd();
+      e.preventDefault();
+    };
+  }
+
   function bindPad(engine, el, source, cb) {
     const FADE_SECONDS = 0.01;
 
@@ -127,70 +194,7 @@
     }, false);
 
     if (button) {
-      const LEFT_ARROW = 37;
-      const UP_ARROW = 38;
-      const RIGHT_ARROW = 39;
-      const DOWN_ARROW = 40;
-      const KBD_INCREMENT = 0.01;
-      const KBD_BIG_INCREMENT = 0.05;
-
-      let isKbdDown = false;
-      let kbdX = 0.5;
-      let kbdY = 0.5;
-      let notifyKbd = () => {
-        notify(kbdX, kbdY);
-      };
-
-      button.onclick = e => {
-        if (isKbdDown) {
-          isKbdDown = false;
-          deactivate();
-        } else {
-          isKbdDown = true;
-          activate();
-          notifyKbd();
-        }
-      };
-
-      button.onfocus = e => {
-        if (button.scrollIntoViewIfNeeded) {
-          button.scrollIntoViewIfNeeded();
-        } else {
-          button.scrollIntoView();
-        }
-      };
-
-      button.onblur = e => {
-        if (isKbdDown) {
-          isKbdDown = false;
-          deactivate();
-        }
-      };
-
-      button.onkeydown = e => {
-        if (!isKbdDown) return;
-
-        let increment = e.shiftKey ? KBD_BIG_INCREMENT : KBD_INCREMENT;
-
-        if (e.keyCode === LEFT_ARROW) {
-          kbdX -= increment;
-          if (kbdX < 0) kbdX = 0;
-        } else if (e.keyCode === UP_ARROW) {
-          kbdY -= increment;
-          if (kbdY < 0) kbdY = 0;
-        } else if (e.keyCode === RIGHT_ARROW) {
-          kbdX += increment;
-          if (kbdX > 1.0) kbdX = 1.0;
-        } else if (e.keyCode === DOWN_ARROW) {
-          kbdY += increment;
-          if (kbdY > 1.0) kbdY = 1.0;
-        } else {
-          return;
-        }
-
-        notifyKbd();
-        e.preventDefault();
-      };
+      bindKeyboard(button, notify, activate, deactivate);
     }
 
     bindDebouncedResize(draw);

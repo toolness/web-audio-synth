@@ -58,5 +58,9 @@ engine.onmidi = e => {
     midiFader.fadeOut();
   } else if (e.type === 'programchange') {
     midiSource = MIDI_SOURCES[e.programNumber % MIDI_SOURCES.length];
+  } else if (e.type === 'controlchange') {
+    if (e.controllerNumber === 1) {
+      pulseWave.dutyCycle = e.controllerPercentage;
+    }
   }
 };

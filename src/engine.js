@@ -55,10 +55,11 @@ class AudioEngine {
     const NOTE_ON = 0x90;
     const NOTE_OFF = 0x80;
     const PROGRAM_CHANGE = 0xc0;
+    const CONTROL_CHANGE = 0xb0;
 
     let [midiType, note, velocity] = e.data;
-    let programNumber = null;
-    let type = null;
+    let programNumber, type, controllerNumber, controllerValue,
+        controllerPercentage;
     let freq = 440 * Math.pow(2, (note - 69) / 12);
 
     midiType = midiType & 0xf0;
@@ -75,10 +76,17 @@ class AudioEngine {
     } else if (midiType === PROGRAM_CHANGE) {
       type = 'programchange';
       programNumber = e.data[1];
+    } else if (midiType === CONTROL_CHANGE) {
+      type = 'controlchange';
+      controllerNumber = e.data[1];
+      controllerValue = e.data[2];
+      controllerPercentage = controllerValue / 127;
     }
 
     if (type && typeof(this.onmidi) === 'function') {
-      this.onmidi({type, note, velocity, freq, programNumber});
+      this.onmidi({type, note, velocity, freq, programNumber,
+                   controllerNumber, controllerValue,
+                   controllerPercentage});
     }
   }
 

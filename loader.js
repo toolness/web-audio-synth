@@ -19,6 +19,7 @@
       // "es2015 works!".
       '(function() {' +
       '  function *boop() { yield 1; }' +
+      '  let [x, y, z] = [1, 2, 3];' +
       '  const BOOP = 1;' +
       '  let tryMe = () => {};' +
       '  class Glorp {}' +

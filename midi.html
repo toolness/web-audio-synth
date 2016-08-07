@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="Affogato-Webfont/affogato.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+<title>MIDI Synthesizer</title>
+<h1>MIDI Synthesizer</h1>
+
+<div class="container">
+<p>
+  This is an attempt to build a simple MIDI synthesizer.
+</p>
+</div>
+
+<script src="loader.js"></script>
+<script>
+Loader.load([
+  "signals/amplifier.js",
+  "signals/fader.js",
+  "signals/pulse-wave.js",
+  "signals/triangle-wave.js",
+  "signals/sine-wave.js",
+  "engine.js",
+  "midi.js"
+]);
+</script>

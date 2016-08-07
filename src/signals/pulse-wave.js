@@ -1,33 +1,34 @@
+"use strict";
+
+/* global Constant */
+
 class PulseWave {
   constructor(sampleRate) {
     this.sampleRate = sampleRate;
-    this._dutyCycle = 0.5;
-    this._freq = 220;
-    this._recompute();
+    this._dutyCycle = new Constant(0.5);
+    this._freq = new Constant(220);
   }
 
-  set freq(hz) {
-    this._freq = hz;
-    this._recompute();
+  set freq(freq) {
+    this._freq = freq;
   }
 
   get freq() {
     return this._freq;
   }
 
-  set dutyCycle(ratio) {
-    this._dutyCycle = ratio;
-    this._recompute();
+  set dutyCycle(dutyCycle) {
+    this._dutyCycle = dutyCycle;
   }
 
   get dutyCycle() {
     return this._dutyCycle;
   }
 
-  _recompute() {
-    let period = Math.floor(this.sampleRate / this._freq);
+  _recompute(freq, dutyCycle) {
+    let period = Math.floor(this.sampleRate / freq);
 
-    this._highSamplesPerPeriod = Math.floor(period * this._dutyCycle);
+    this._highSamplesPerPeriod = Math.floor(period * dutyCycle);
     this._lowSamplesPerPeriod = period - this._highSamplesPerPeriod;
   }
 
@@ -35,11 +36,17 @@ class PulseWave {
     const SIGNAL_LOW = -1;
     const SIGNAL_HIGH = 1;
 
-    let signal = SIGNAL_LOW;
-    let samplesUntilSignalFlip = this._lowSamplesPerPeriod;
+    let freqSamples = this._freq.samples();
+    let dutyCycleSamples = this._dutyCycle.samples();
+    let signal = SIGNAL_HIGH;
+    let samplesUntilSignalFlip = 0;
 
     while (true) {
+      let freq = freqSamples.next().value;
+      let dutyCycle = dutyCycleSamples.next().value;
+
       if (samplesUntilSignalFlip == 0) {
+        this._recompute(freq, dutyCycle);
         if (signal === SIGNAL_LOW) {
           signal = SIGNAL_HIGH;
           samplesUntilSignalFlip = this._highSamplesPerPeriod;

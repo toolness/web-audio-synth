@@ -1,11 +1,15 @@
+"use strict";
+
+/* global Constant */
+
 class SineWave {
   constructor(sampleRate) {
     this.sampleRate = sampleRate;
-    this._freq = 220;
+    this._freq = new Constant(220);
   }
 
-  set freq(hz) {
-    this._freq = hz;
+  set freq(freq) {
+    this._freq = freq;
   }
 
   get freq() {
@@ -13,11 +17,15 @@ class SineWave {
   }
 
   *samples() {
+    let freqSamples = this._freq.samples();
+    let freq = freqSamples.next().value;
+
     while (true) {
-      let period = Math.floor(this.sampleRate / this._freq);
+      let period = Math.floor(this.sampleRate / freq);
 
       for (let i = 0; i < period; i++) {
         yield Math.sin(i * 2 * Math.PI / period);
+        freq = freqSamples.next().value;
       }
     }
   }

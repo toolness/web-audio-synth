@@ -29,7 +29,7 @@ function setDutyCycle(percentage) {
       percentage = DEFAULT_DUTY_CYCLE;
     }
   }
-  pulseWave.dutyCycle = percentage;
+  pulseWave.dutyCycle.value = percentage;
   $('#duty-cycle').textContent = Math.floor(percentage * 100) + '%';
   sessionStorage['dutyCycle'] = percentage;
 }
@@ -39,7 +39,7 @@ engine.onmidi = e => {
     // midiAmp.amount = e.velocity / 100;
     midiFader.source = midiSource;
     midiFader.fadeIn();
-    midiSource.freq = e.freq;
+    midiSource.freq.value = e.freq;
     engine.activate(midiAmp);
   } else if (e.type === 'noteoff') {
     midiFader.fadeOut();

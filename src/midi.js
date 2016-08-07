@@ -10,10 +10,29 @@ let quietPulseWave = new Amplifier(pulseWave, 0.5);
 let sineWave = new SineWave(engine.sampleRate);
 
 const MIDI_SOURCES = [pulseWave, triangleWave, sineWave];
+const DEFAULT_DUTY_CYCLE = 0.5;
 
 let midiFader = new Fader(engine.sampleRate, 0.01);
 let midiAmp = new Amplifier(midiFader, 1);
-let midiSource = MIDI_SOURCES[0];
+let midiSource;
+let $ = document.querySelector.bind(document);
+
+function setMidiSource(index) {
+  midiSource = MIDI_SOURCES[index % MIDI_SOURCES.length];
+  $('#midi-source').textContent = midiSource.constructor.name;
+}
+
+function setDutyCycle(percentage) {
+  if (typeof(percentage) === 'undefined') {
+    percentage = parseFloat(sessionStorage['dutyCycle']);
+    if (isNaN(percentage)) {
+      percentage = DEFAULT_DUTY_CYCLE;
+    }
+  }
+  pulseWave.dutyCycle = percentage;
+  $('#duty-cycle').textContent = Math.floor(percentage * 100) + '%';
+  sessionStorage['dutyCycle'] = percentage;
+}
 
 engine.onmidi = e => {
   if (e.type === 'noteon') {
@@ -25,10 +44,13 @@ engine.onmidi = e => {
   } else if (e.type === 'noteoff') {
     midiFader.fadeOut();
   } else if (e.type === 'programchange') {
-    midiSource = MIDI_SOURCES[e.programNumber % MIDI_SOURCES.length];
+    setMidiSource(e.programNumber);
   } else if (e.type === 'controlchange') {
     if (e.controllerNumber === 1) {
-      pulseWave.dutyCycle = e.controllerPercentage;
+      setDutyCycle(e.controllerPercentage);
     }
   }
 };
+
+setMidiSource(0);
+setDutyCycle();

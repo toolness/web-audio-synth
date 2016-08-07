@@ -3,14 +3,48 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="Affogato-Webfont/affogato.css" rel="stylesheet">
 <link href="style.css" rel="stylesheet">
+<style>
+aside {
+  font-style: normal;
+  color: darkgray;
+}
+</style>
 <title>MIDI Synthesizer</title>
 <h1>MIDI Synthesizer</h1>
 
 <div class="container">
 <p>
-  This is an attempt to build a simple MIDI synthesizer.
+  This is an attempt to build a simple MIDI synthesizer. You'll need
+  a MIDI input device and a browser supporting the
+  <a href="http://caniuse.com/#search=midi">Web MIDI API</a> to
+  use it.
+</p>
+<p>
+  Current instrument: <code id="midi-source"></code>
+</p>
+<aside>
+  Your MIDI device must send a <em>Program Change</em> event to adjust the
+  current instrument.
+</aside>
+<p>
+  Pulse wave duty cycle: <span id="duty-cycle"></span>
+</p>
+<aside>
+  Your MIDI device must send a <em>Control Change</em> event for
+  controller 1 to change the pulse wave duty cycle.
+</aside>
+<p>
+  Play notes on your MIDI device to make music!
 </p>
 </div>
+
+<footer class="container">
+  <p>Everything here is in the public domain.</p>
+  <p>
+    Except for the <a href="https://www.lobdell.me/affogato/">Affogato</a>
+    font, which is &copy; Eric Lobdell 2016.
+  </p>
+</footer>
 
 <script src="loader.js"></script>
 <script>

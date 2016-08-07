@@ -41,6 +41,7 @@ class Fader {
       if (this._fade < 0) {
         this._fade = 0;
         this._fadeSlope = 0;
+        return;
       } else if (this._fade > 1) {
         this._fade = 1;
         this._fadeSlope = 0;

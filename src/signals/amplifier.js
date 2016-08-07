@@ -7,9 +7,8 @@ class Amplifier {
   *samples() {
     let sourceSamples = this._source.samples();
 
-    while (true) {
-      let value = sourceSamples.next().value * this.amount;
-      yield value;
+    for (let nextValue of sourceSamples) {
+      yield nextValue * this.amount;
     }
   }
 }

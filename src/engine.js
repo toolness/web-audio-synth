@@ -1,34 +1,46 @@
 class AudioEngine {
   constructor() {
-    const BUFFER_SIZE = 1024;
-
     this._audioCtx = new AudioContext();
-    this._bufferSource = this._audioCtx.createBufferSource();
-    this._bufferSourceStarted = false;
-    this._scriptNode = this._audioCtx.createScriptProcessor(
-      BUFFER_SIZE,
-      1,
-      1
-    );
-
-    this._bufferSource.connect(this._scriptNode);
-    this._scriptNode.connect(this._audioCtx.destination);
-    this._scriptNode.onaudioprocess = this._processAudio.bind(this);
+    this._bufferSource = null;
+    this._scriptNode = null;
     this._source = null;
-    this._started = false;
+    this._sourceSamples = null;
+    this._deactivateTimeout = null;
     this._initMidi();
   }
 
   activate(source) {
+    clearTimeout(this._deactivateTimeout);
+    this._deactivateTimeout = null;
+
     if (this._source !== source) {
       this._source = source;
       this._sourceSamples = source.samples();
     }
 
-    if (!this._started) {
+    if (!this._bufferSource) {
+      const BUFFER_SIZE = 1024;
+
+      this._scriptNode = this._audioCtx.createScriptProcessor(
+        BUFFER_SIZE,
+        1,
+        1
+      );
+      this._scriptNode.onaudioprocess = this._processAudio.bind(this);
+      this._bufferSource = this._audioCtx.createBufferSource();
+      this._bufferSource.connect(this._scriptNode);
+      this._scriptNode.connect(this._audioCtx.destination);
       this._bufferSource.start();
-      this._started = true;
     }
+  }
+
+  _deactivate() {
+    this._bufferSource.stop();
+    this._bufferSource.disconnect(this._scriptNode);
+    this._scriptNode.disconnect(this._audioCtx.destination);
+    this._scriptNode = null;
+    this._bufferSource = null;
+    this._sourceSamples = null;
   }
 
   get sampleRate() {
@@ -99,7 +111,22 @@ class AudioEngine {
       let data = e.outputBuffer.getChannelData(chan);
 
       for (let i = 0; i < e.outputBuffer.length; i++) {
-        data[i] = this._sourceSamples.next().value;
+        let next = this._sourceSamples.next();
+        if (next.done) {
+          if (this._deactivateTimeout === null) {
+            const DEACTIVATE_DELAY = 3000;
+            this._source = null;
+            this._deactivateTimeout = setTimeout(
+              this._deactivate.bind(this),
+              DEACTIVATE_DELAY
+            );
+          }
+          for (; i < e.outputBuffer.length; i++) {
+            data[i] = 0;
+          }
+          return;
+        }
+        data[i] = next.value;
       }
     }
   }

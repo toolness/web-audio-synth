@@ -4,6 +4,16 @@
 <link href="Affogato-Webfont/affogato.css" rel="stylesheet">
 <link href="style.css" rel="stylesheet">
 <style>
+.pad [role="status"] {
+  /* Bleh, we have to do this because we're using non-Affogato
+   * glyphs for the flat and sharp signs. */
+  min-height: 1.33em;
+}
+
+.pad.non-interactive {
+  cursor: auto;
+}
+
 aside {
   font-style: normal;
   color: darkgray;
@@ -33,9 +43,11 @@ aside {
   Your MIDI device must send a <em>Control Change</em> event for
   controller 1 to change the pulse wave duty cycle.
 </aside>
-<p>
-  Play notes on your MIDI device to make music!
-</p>
+</div>
+
+<div id="midi" class="pad non-interactive">
+  <h2>Play notes on your MIDI device!</h2>
+  <p role="status">&nbsp;</p>
 </div>
 
 <footer class="container">

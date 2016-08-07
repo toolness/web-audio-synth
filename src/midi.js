@@ -61,11 +61,12 @@ function setDutyCycle(percentage) {
 
 engine.onmidi = e => {
   if (e.type === 'noteon') {
-    console.log(e.noteString);
     chord.on(e.note, e.freq);
     engine.activate(chord);
+    noteDisplay.on(e.noteString);
   } else if (e.type === 'noteoff') {
     chord.off(e.note);
+    noteDisplay.off(e.noteString);
   } else if (e.type === 'programchange') {
     setMidiSource(e.programNumber);
   } else if (e.type === 'controlchange') {
@@ -136,6 +137,35 @@ class Chord {
     }
   }
 }
+
+class NoteDisplay {
+  constructor(el) {
+    this._notes = [];
+    this._el = el;
+    this._status = el.querySelector('[role="status"]');
+  }
+
+  _updateStatus() {
+    this._status.textContent = this._notes.join(' ');
+  }
+
+  on(noteString) {
+    this._notes.push(noteString);
+    this._updateStatus();
+    this._el.classList.add('active');
+  }
+
+  off(noteString) {
+    this._notes.splice(this._notes.indexOf(noteString), 1);
+    if (this._notes.length === 0) {
+      this._el.classList.remove('active');
+    } else {
+      this._updateStatus();
+    }
+  }
+}
+
+let noteDisplay = new NoteDisplay($('#midi'));
 
 let chord = new Chord(3);
 

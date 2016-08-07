@@ -4,12 +4,14 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Noise = function () {
-  function Noise() {
-    _classCallCheck(this, Noise);
+var Constant = function () {
+  function Constant(value) {
+    _classCallCheck(this, Constant);
+
+    this.value = value;
   }
 
-  _createClass(Noise, [{
+  _createClass(Constant, [{
     key: "samples",
     value: regeneratorRuntime.mark(function samples() {
       return regeneratorRuntime.wrap(function samples$(_context) {
@@ -22,7 +24,7 @@ var Noise = function () {
               }
 
               _context.next = 3;
-              return Math.random() * 2 - 1;
+              return this.value;
 
             case 3:
               _context.next = 0;
@@ -37,5 +39,5 @@ var Noise = function () {
     })
   }]);
 
-  return Noise;
+  return Constant;
 }();

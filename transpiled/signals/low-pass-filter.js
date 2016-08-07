@@ -13,15 +13,15 @@ var LowPassFilter = function () {
   }
 
   _createClass(LowPassFilter, [{
-    key: "signal",
-    value: regeneratorRuntime.mark(function signal() {
-      var samples, sourceSignal;
-      return regeneratorRuntime.wrap(function signal$(_context) {
+    key: "samples",
+    value: regeneratorRuntime.mark(function samples() {
+      var samples, sourceSamples;
+      return regeneratorRuntime.wrap(function samples$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               samples = [];
-              sourceSignal = this._source.signal();
+              sourceSamples = this._source.samples();
 
             case 2:
               if (!true) {
@@ -29,7 +29,7 @@ var LowPassFilter = function () {
                 break;
               }
 
-              samples.push(sourceSignal.next().value);
+              samples.push(sourceSamples.next().value);
               if (samples.length > this.samplesToAverage) {
                 samples.splice(0, samples.length - this.samplesToAverage);
               }
@@ -47,7 +47,7 @@ var LowPassFilter = function () {
               return _context.stop();
           }
         }
-      }, signal, this);
+      }, samples, this);
     })
   }]);
 

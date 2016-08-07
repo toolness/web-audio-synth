@@ -26,19 +26,19 @@ var Fader = function () {
       this._fadeSlope = -this._baseFadeSlope;
     }
   }, {
-    key: "signal",
-    value: regeneratorRuntime.mark(function signal() {
+    key: "samples",
+    value: regeneratorRuntime.mark(function samples() {
       var value;
-      return regeneratorRuntime.wrap(function signal$(_context) {
+      return regeneratorRuntime.wrap(function samples$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               if (!true) {
-                _context.next = 18;
+                _context.next = 24;
                 break;
               }
 
-              if (!this._sourceSignal) {
+              if (!this._sourceSamples) {
                 _context.next = 12;
                 break;
               }
@@ -48,7 +48,7 @@ var Fader = function () {
                 break;
               }
 
-              value = this._sourceSignal.next().value;
+              value = this._sourceSamples.next().value;
               _context.next = 6;
               return value * this._fade;
 
@@ -72,29 +72,38 @@ var Fader = function () {
 
               this._fade += this._fadeSlope;
 
-              if (this._fade < 0) {
-                this._fade = 0;
-                this._fadeSlope = 0;
-              } else if (this._fade > 1) {
+              if (!(this._fade < 0)) {
+                _context.next = 21;
+                break;
+              }
+
+              this._fade = 0;
+              this._fadeSlope = 0;
+              return _context.abrupt("return");
+
+            case 21:
+              if (this._fade > 1) {
                 this._fade = 1;
                 this._fadeSlope = 0;
               }
+
+            case 22:
               _context.next = 0;
               break;
 
-            case 18:
+            case 24:
             case "end":
               return _context.stop();
           }
         }
-      }, signal, this);
+      }, samples, this);
     })
   }, {
     key: "source",
     set: function set(source) {
       if (source !== this._source) {
         this._source = source;
-        this._sourceSignal = source ? source.signal() : null;
+        this._sourceSamples = source ? source.samples() : null;
       }
     }
   }]);

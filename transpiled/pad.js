@@ -15,6 +15,73 @@
     }, false);
   }
 
+  function bindKeyboard(button, notify, activate, deactivate) {
+    var LEFT_ARROW = 37;
+    var UP_ARROW = 38;
+    var RIGHT_ARROW = 39;
+    var DOWN_ARROW = 40;
+    var KBD_INCREMENT = 0.01;
+    var KBD_BIG_INCREMENT = 0.05;
+
+    var isKbdDown = false;
+    var kbdX = 0.5;
+    var kbdY = 0.5;
+    var notifyKbd = function notifyKbd() {
+      notify(kbdX, kbdY);
+    };
+
+    button.onclick = function (e) {
+      if (isKbdDown) {
+        isKbdDown = false;
+        deactivate();
+      } else {
+        isKbdDown = true;
+        activate();
+        notifyKbd();
+      }
+    };
+
+    button.onfocus = function (e) {
+      if (button.scrollIntoViewIfNeeded) {
+        button.scrollIntoViewIfNeeded();
+      } else {
+        button.scrollIntoView();
+      }
+    };
+
+    button.onblur = function (e) {
+      if (isKbdDown) {
+        isKbdDown = false;
+        deactivate();
+      }
+    };
+
+    button.onkeydown = function (e) {
+      if (!isKbdDown) return;
+
+      var increment = e.shiftKey ? KBD_BIG_INCREMENT : KBD_INCREMENT;
+
+      if (e.keyCode === LEFT_ARROW) {
+        kbdX -= increment;
+        if (kbdX < 0) kbdX = 0;
+      } else if (e.keyCode === UP_ARROW) {
+        kbdY -= increment;
+        if (kbdY < 0) kbdY = 0;
+      } else if (e.keyCode === RIGHT_ARROW) {
+        kbdX += increment;
+        if (kbdX > 1.0) kbdX = 1.0;
+      } else if (e.keyCode === DOWN_ARROW) {
+        kbdY += increment;
+        if (kbdY > 1.0) kbdY = 1.0;
+      } else {
+        return;
+      }
+
+      notifyKbd();
+      e.preventDefault();
+    };
+  }
+
   function bindPad(engine, el, source, cb) {
     var FADE_SECONDS = 0.01;
 
@@ -40,7 +107,7 @@
       var me = el.getBoundingClientRect();
       var width = me.width;
       var height = me.height;
-      var signal = source.signal();
+      var samples = source.samples();
       var path = svg.querySelector('path');
       var segments = [];
 
@@ -48,7 +115,7 @@
       svg.setAttribute('height', height);
 
       for (var i = 0; i < width; i += 1) {
-        var value = signal.next().value;
+        var value = samples.next().value;
 
         value = height - (value * (height / (2 + V_MARGIN)) + height / 2);
         segments.push((i == 0 ? "M " : "L ") + i + " " + value);
@@ -129,72 +196,7 @@
     }, false);
 
     if (button) {
-      (function () {
-        var LEFT_ARROW = 37;
-        var UP_ARROW = 38;
-        var RIGHT_ARROW = 39;
-        var DOWN_ARROW = 40;
-        var KBD_INCREMENT = 0.01;
-        var KBD_BIG_INCREMENT = 0.05;
-
-        var isKbdDown = false;
-        var kbdX = 0.5;
-        var kbdY = 0.5;
-        var notifyKbd = function notifyKbd() {
-          notify(kbdX, kbdY);
-        };
-
-        button.onclick = function (e) {
-          if (isKbdDown) {
-            isKbdDown = false;
-            deactivate();
-          } else {
-            isKbdDown = true;
-            activate();
-            notifyKbd();
-          }
-        };
-
-        button.onfocus = function (e) {
-          if (button.scrollIntoViewIfNeeded) {
-            button.scrollIntoViewIfNeeded();
-          } else {
-            button.scrollIntoView();
-          }
-        };
-
-        button.onblur = function (e) {
-          if (isKbdDown) {
-            isKbdDown = false;
-            deactivate();
-          }
-        };
-
-        button.onkeydown = function (e) {
-          if (!isKbdDown) return;
-
-          var increment = e.shiftKey ? KBD_BIG_INCREMENT : KBD_INCREMENT;
-
-          if (e.keyCode === LEFT_ARROW) {
-            kbdX -= increment;
-            if (kbdX < 0) kbdX = 0;
-          } else if (e.keyCode === UP_ARROW) {
-            kbdY -= increment;
-            if (kbdY < 0) kbdY = 0;
-          } else if (e.keyCode === RIGHT_ARROW) {
-            kbdX += increment;
-            if (kbdX > 1.0) kbdX = 1.0;
-          } else if (e.keyCode === DOWN_ARROW) {
-            kbdY += increment;
-            if (kbdY > 1.0) kbdY = 1.0;
-          } else {
-            return;
-          }
-
-          notifyKbd();
-          e.preventDefault();
-        };
-      })();
+      bindKeyboard(button, notify, activate, deactivate);
     }
 
     bindDebouncedResize(draw);

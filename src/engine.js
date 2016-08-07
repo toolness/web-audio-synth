@@ -61,6 +61,25 @@ class AudioEngine {
     }
   }
 
+  _getNoteString(note) {
+    const NOTES = [
+      'C',
+      'C#/Db',
+      'D',
+      'D#/Eb',
+      'E',
+      'F',
+      'F#/Gb',
+      'G',
+      'G#/Ab',
+      'A',
+      'A#/Bb',
+      'B',
+    ].map(note => note.replace('#', '\u266F').replace('b', '\u266D'));
+
+    return NOTES[note % NOTES.length];
+  }
+
   // https://www.w3.org/TR/webmidi/
   // https://www.midi.org/specifications/item/table-1-summary-of-midi-message
   _onMidiMessage(e) {
@@ -71,7 +90,7 @@ class AudioEngine {
 
     let [midiType, note, velocity] = e.data;
     let programNumber, type, controllerNumber, controllerValue,
-        controllerPercentage;
+        controllerPercentage, noteString;
     let freq = 440 * Math.pow(2, (note - 69) / 12);
 
     midiType = midiType & 0xf0;
@@ -79,6 +98,10 @@ class AudioEngine {
     if (midiType === NOTE_ON && velocity === 0) {
       // Apparently MIDI can be weird.
       midiType = NOTE_OFF;
+    }
+
+    if (midiType === NOTE_ON || midiType === NOTE_OFF) {
+      noteString = this._getNoteString(note);
     }
 
     if (midiType === NOTE_ON) {
@@ -98,7 +121,7 @@ class AudioEngine {
     if (type && typeof(this.onmidi) === 'function') {
       this.onmidi({type, note, velocity, freq, programNumber,
                    controllerNumber, controllerValue,
-                   controllerPercentage});
+                   controllerPercentage, noteString});
     }
   }
 

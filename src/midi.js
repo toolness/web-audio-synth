@@ -61,6 +61,7 @@ function setDutyCycle(percentage) {
 
 engine.onmidi = e => {
   if (e.type === 'noteon') {
+    console.log(e.noteString);
     chord.on(e.note, e.freq);
     engine.activate(chord);
   } else if (e.type === 'noteoff') {

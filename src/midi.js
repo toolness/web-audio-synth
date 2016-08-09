@@ -5,39 +5,33 @@
 
 let engine = new AudioEngine();
 
-const DEFAULT_DUTY_CYCLE = 0.5;
-
-let dutyCycle = new Constant(DEFAULT_DUTY_CYCLE);
 let $ = document.querySelector.bind(document);
 
-function setDutyCycle(percentage) {
-  if (typeof(percentage) === 'undefined') {
-    percentage = parseFloat(sessionStorage['dutyCycle']);
-    if (isNaN(percentage)) {
-      percentage = DEFAULT_DUTY_CYCLE;
-    }
-  }
-  dutyCycle.value = percentage;
-  $('#duty-cycle').textContent = Math.floor(percentage * 100) + '%';
-  sessionStorage['dutyCycle'] = percentage;
-}
+class StoredPercentage {
+  constructor(el, defaultValue, key) {
+    this._el = el;
+    this._key = key;
 
-engine.onmidi = e => {
-  if (e.type === 'noteon') {
-    chord.on(e.note, e.freq);
-    engine.activate(chord);
-    noteDisplay.on(e.noteString);
-  } else if (e.type === 'noteoff') {
-    chord.off(e.note);
-    noteDisplay.off(e.noteString);
-  } else if (e.type === 'programchange') {
-    instruments.select(e.programNumber);
-  } else if (e.type === 'controlchange') {
-    if (e.controllerNumber === 1) {
-      setDutyCycle(e.controllerPercentage);
+    let percentage = parseFloat(sessionStorage[this._key]);
+    if (isNaN(percentage)) {
+      percentage = defaultValue;
+    }
+
+    this.value = percentage;
+  }
+
+  set value(percentage) {
+    this._value = percentage;
+    this._el.textContent = Math.floor(percentage * 100) + '%';
+    sessionStorage[this._key] = percentage;
+  }
+
+  *samples() {
+    while (true) {
+      yield this._value;
     }
   }
-};
+}
 
 class Instruments {
   constructor(el, bank) {
@@ -142,6 +136,8 @@ class NoteDisplay {
   }
 }
 
+let dutyCycle = new StoredPercentage($('#duty-cycle'), 0.5, 'dutyCycle');
+
 let instruments = new Instruments($('#midi-source'), [
   {
     name: PulseWave.name,
@@ -178,4 +174,19 @@ let noteDisplay = new NoteDisplay($('#midi'));
 
 let chord = new Chord(instruments, 3);
 
-setDutyCycle();
+engine.onmidi = e => {
+  if (e.type === 'noteon') {
+    chord.on(e.note, e.freq);
+    engine.activate(chord);
+    noteDisplay.on(e.noteString);
+  } else if (e.type === 'noteoff') {
+    chord.off(e.note);
+    noteDisplay.off(e.noteString);
+  } else if (e.type === 'programchange') {
+    instruments.select(e.programNumber);
+  } else if (e.type === 'controlchange') {
+    if (e.controllerNumber === 1) {
+      dutyCycle.value = e.controllerPercentage;
+    }
+  }
+};

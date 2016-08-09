@@ -5,47 +5,10 @@
 
 let engine = new AudioEngine();
 
-const MIDI_SOURCES = [
-  {
-    name: PulseWave.name,
-    create(freq) {
-      let pulseWave = new PulseWave(engine.sampleRate);
-
-      pulseWave.freq = freq;
-      pulseWave.dutyCycle = dutyCycle;
-
-      return pulseWave;
-    }
-  },
-  {
-    name: TriangleWave.name,
-    create(freq) {
-      let triangleWave = new TriangleWave(engine.sampleRate);
-
-      triangleWave.freq = freq;
-      return triangleWave;
-    }
-  },
-  {
-    name: SineWave.name,
-    create(freq) {
-      let sineWave = new SineWave(engine.sampleRate);
-
-      sineWave.freq = freq;
-      return sineWave;
-    }
-  }
-];
 const DEFAULT_DUTY_CYCLE = 0.5;
 
 let dutyCycle = new Constant(DEFAULT_DUTY_CYCLE);
-let midiSource;
 let $ = document.querySelector.bind(document);
-
-function setMidiSource(index) {
-  midiSource = MIDI_SOURCES[index % MIDI_SOURCES.length];
-  $('#midi-source').textContent = midiSource.name;
-}
 
 function setDutyCycle(percentage) {
   if (typeof(percentage) === 'undefined') {
@@ -68,7 +31,7 @@ engine.onmidi = e => {
     chord.off(e.note);
     noteDisplay.off(e.noteString);
   } else if (e.type === 'programchange') {
-    setMidiSource(e.programNumber);
+    instruments.select(e.programNumber);
   } else if (e.type === 'controlchange') {
     if (e.controllerNumber === 1) {
       setDutyCycle(e.controllerPercentage);
@@ -76,8 +39,22 @@ engine.onmidi = e => {
   }
 };
 
+class Instruments {
+  constructor(el, bank) {
+    this._el = el;
+    this._bank = bank;
+    this.select(0);
+  }
+
+  select(index) {
+    this.selected = this._bank[index % this._bank.length];
+    this._el.textContent = this.selected.name;
+  }
+}
+
 class Chord {
-  constructor(maxNotes) {
+  constructor(instruments, maxNotes) {
+    this._instruments = instruments;
     this._sources = new Map();
     this._maxNotes = maxNotes;
   }
@@ -88,7 +65,7 @@ class Chord {
     } else {
       const FADE_SECONDS = 0.01;
 
-      let source = midiSource.create(new Constant(freq));
+      let source = this._instruments.selected.create(new Constant(freq));
       let fader = new Fader(engine.sampleRate, FADE_SECONDS);
 
       fader.source = source;
@@ -165,9 +142,40 @@ class NoteDisplay {
   }
 }
 
+let instruments = new Instruments($('#midi-source'), [
+  {
+    name: PulseWave.name,
+    create(freq) {
+      let pulseWave = new PulseWave(engine.sampleRate);
+
+      pulseWave.freq = freq;
+      pulseWave.dutyCycle = dutyCycle;
+
+      return pulseWave;
+    }
+  },
+  {
+    name: TriangleWave.name,
+    create(freq) {
+      let triangleWave = new TriangleWave(engine.sampleRate);
+
+      triangleWave.freq = freq;
+      return triangleWave;
+    }
+  },
+  {
+    name: SineWave.name,
+    create(freq) {
+      let sineWave = new SineWave(engine.sampleRate);
+
+      sineWave.freq = freq;
+      return sineWave;
+    }
+  }
+]);
+
 let noteDisplay = new NoteDisplay($('#midi'));
 
-let chord = new Chord(3);
+let chord = new Chord(instruments, 3);
 
-setMidiSource(0);
 setDutyCycle();

@@ -1,6 +1,6 @@
 "use strict";
 
-/* global TriangleWave, PulseWave, Amplifier, SineWave,
+/* global TriangleWave, PulseWave, SineWave,
  *        AudioEngine, Adsr, Constant */
 
 let engine = new AudioEngine();

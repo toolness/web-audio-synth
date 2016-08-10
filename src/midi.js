@@ -1,7 +1,7 @@
 "use strict";
 
 /* global TriangleWave, PulseWave, Amplifier, SineWave,
- *        AudioEngine, Fader, Constant */
+ *        AudioEngine, Adsr, Constant */
 
 let engine = new AudioEngine();
 
@@ -55,22 +55,31 @@ class Chord {
 
   on(note, freq) {
     if (this._sources.has(note)) {
-      this._sources.get(note).fadeIn();
+      this._sources.get(note).startAttack();
     } else {
-      const FADE_SECONDS = 0.01;
+      let ATTACK_SECONDS = 0.01;
+      let DECAY_SECONDS = 0.01;
+      let SUSTAIN_LEVEL = 1.0;
+      let RELEASE_SECONDS = 0.01;
 
       let source = this._instruments.selected.create(new Constant(freq));
-      let fader = new Fader(engine.sampleRate, FADE_SECONDS);
+      let adsr = new Adsr(
+        engine.sampleRate,
+        source,
+        ATTACK_SECONDS,
+        DECAY_SECONDS,
+        SUSTAIN_LEVEL,
+        RELEASE_SECONDS
+      );
 
-      fader.source = source;
-      fader.fadeIn();
+      adsr.startAttack();
 
-      this._sources.set(note, fader);
+      this._sources.set(note, adsr);
     }
   }
 
   off(note) {
-    this._sources.get(note).fadeOut();
+    this._sources.get(note).startRelease();
   }
 
   *samples() {

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="Affogato-Webfont/affogato.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+<style>
+.line {
+  stroke: steelblue;
+  fill: none;
+}
+</style>
+<title>Graph</title>
+<h1>Graph</h1>
+
+<div id="graph"></div>
+
+<footer class="container">
+  <p>Everything here is in the public domain.</p>
+  <p>
+    Except for the <a href="https://www.lobdell.me/affogato/">Affogato</a>
+    font, which is &copy; Eric Lobdell 2016.
+  </p>
+</footer>
+
+<script src="vendor/d3.js"></script>
+<script src="loader.js"></script>
+<script>
+Loader.load([
+  "signals/constant.js",
+  "signals/sine-wave.js",
+  "graph.js"
+]);
+</script>

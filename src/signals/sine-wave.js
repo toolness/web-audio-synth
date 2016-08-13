@@ -17,16 +17,13 @@ class SineWave {
   }
 
   *samples() {
-    let freqSamples = this._freq.samples();
-    let freq = freqSamples.next().value;
+    let angle = 0;
 
-    while (true) {
+    for (let freq of this._freq.samples()) {
       let period = Math.floor(this.sampleRate / freq);
-
-      for (let i = 0; i < period; i++) {
-        yield Math.sin(i * 2 * Math.PI / period);
-        freq = freqSamples.next().value;
-      }
+      let angularVelocity = 2 * Math.PI / period;
+      angle += angularVelocity;
+      yield Math.sin(angle);
     }
   }
 }

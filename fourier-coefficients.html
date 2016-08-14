@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="Affogato-Webfont/affogato.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+<style>
+figcaption {
+  font-family: Georgia, serif;
+  font-style: italic;
+}
+</style>
+<title>Fourier Coefficients</title>
+<h1>Fourier Coefficients</h1>
+
+<div class="container">
+  Let's figure out the Fourier coefficients of a square wave!
+</div>
+
+<figure id="a_0">
+  <figcaption>f(t)</figcaption>
+</figure>
+
+<div id="a_1">
+  <figcaption>f(t) cosωt</figcaption>
+</div>
+
+<div id="b_1">
+  <figcaption>f(t) sinωt</figcaption>
+</div>
+
+<div id="a_2">
+  <figcaption>f(t) cos2ωt</figcaption>
+</div>
+
+<div id="b_2">
+  <figcaption>f(t) sin2ωt</figcaption>
+</div>
+
+<footer class="container">
+  <p>Everything here is in the public domain.</p>
+  <p>
+    Except for the <a href="https://www.lobdell.me/affogato/">Affogato</a>
+    font, which is &copy; Eric Lobdell 2016.
+  </p>
+</footer>
+
+<script src="vendor/d3.js"></script>
+<script src="loader.js"></script>
+<script>
+Loader.load([
+  "signals/constant.js",
+  "signals/sine-wave.js",
+  "signals/pulse-wave.js",
+  "draw-graph.js",
+  "pages/fourier-coefficients.js"
+]);
+</script>

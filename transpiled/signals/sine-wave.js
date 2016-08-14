@@ -17,50 +17,78 @@ var SineWave = function () {
   _createClass(SineWave, [{
     key: "samples",
     value: regeneratorRuntime.mark(function samples() {
-      var freqSamples, freq, period, i;
+      var angle, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, freq, period, angularVelocity;
+
       return regeneratorRuntime.wrap(function samples$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              freqSamples = this._freq.samples();
-              freq = freqSamples.next().value;
+              angle = 0;
+              _iteratorNormalCompletion = true;
+              _didIteratorError = false;
+              _iteratorError = undefined;
+              _context.prev = 4;
+              _iterator = this._freq.samples()[Symbol.iterator]();
 
-            case 2:
-              if (!true) {
-                _context.next = 14;
+            case 6:
+              if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
+                _context.next = 16;
                 break;
               }
 
+              freq = _step.value;
               period = Math.floor(this.sampleRate / freq);
-              i = 0;
+              angularVelocity = 2 * Math.PI / period;
 
-            case 5:
-              if (!(i < period)) {
-                _context.next = 12;
+              angle += angularVelocity;
+              _context.next = 13;
+              return Math.sin(angle);
+
+            case 13:
+              _iteratorNormalCompletion = true;
+              _context.next = 6;
+              break;
+
+            case 16:
+              _context.next = 22;
+              break;
+
+            case 18:
+              _context.prev = 18;
+              _context.t0 = _context["catch"](4);
+              _didIteratorError = true;
+              _iteratorError = _context.t0;
+
+            case 22:
+              _context.prev = 22;
+              _context.prev = 23;
+
+              if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+              }
+
+            case 25:
+              _context.prev = 25;
+
+              if (!_didIteratorError) {
+                _context.next = 28;
                 break;
               }
 
-              _context.next = 8;
-              return Math.sin(i * 2 * Math.PI / period);
+              throw _iteratorError;
 
-            case 8:
-              freq = freqSamples.next().value;
+            case 28:
+              return _context.finish(25);
 
-            case 9:
-              i++;
-              _context.next = 5;
-              break;
+            case 29:
+              return _context.finish(22);
 
-            case 12:
-              _context.next = 2;
-              break;
-
-            case 14:
+            case 30:
             case "end":
               return _context.stop();
           }
         }
-      }, samples, this);
+      }, samples, this, [[4, 18, 22, 30], [23,, 25, 29]]);
     })
   }, {
     key: "freq",

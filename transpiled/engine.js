@@ -89,6 +89,15 @@ var AudioEngine = function () {
         });
       }
     }
+  }, {
+    key: '_getNoteString',
+    value: function _getNoteString(note) {
+      var NOTES = ['C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B'].map(function (note) {
+        return note.replace('#', '♯').replace('b', '♭');
+      });
+
+      return NOTES[note % NOTES.length];
+    }
 
     // https://www.w3.org/TR/webmidi/
     // https://www.midi.org/specifications/item/table-1-summary-of-midi-message
@@ -111,7 +120,8 @@ var AudioEngine = function () {
           type = void 0,
           controllerNumber = void 0,
           controllerValue = void 0,
-          controllerPercentage = void 0;
+          controllerPercentage = void 0,
+          noteString = void 0;
       var freq = 440 * Math.pow(2, (note - 69) / 12);
 
       midiType = midiType & 0xf0;
@@ -119,6 +129,10 @@ var AudioEngine = function () {
       if (midiType === NOTE_ON && velocity === 0) {
         // Apparently MIDI can be weird.
         midiType = NOTE_OFF;
+      }
+
+      if (midiType === NOTE_ON || midiType === NOTE_OFF) {
+        noteString = this._getNoteString(note);
       }
 
       if (midiType === NOTE_ON) {
@@ -138,7 +152,7 @@ var AudioEngine = function () {
       if (type && typeof this.onmidi === 'function') {
         this.onmidi({ type: type, note: note, velocity: velocity, freq: freq, programNumber: programNumber,
           controllerNumber: controllerNumber, controllerValue: controllerValue,
-          controllerPercentage: controllerPercentage });
+          controllerPercentage: controllerPercentage, noteString: noteString });
       }
     }
   }, {

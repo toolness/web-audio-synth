@@ -75,12 +75,15 @@ function drawGraph(selector, createSampleIterator, options) {
     .attr('d', line);
 }
 
-drawGraph('#graph', function *(sampleRate, seconds, totalSamples) {
+drawGraph('#sine-fm', function *(sampleRate, seconds, totalSamples) {
   let signal = new SineWave(sampleRate);
   let samples = signal.samples()
   let startFreq = 1;
   let endFreq = 10;
   let freqDelta = endFreq - startFreq;
+
+  document.querySelector('#sine-fm-start').textContent = startFreq;
+  document.querySelector('#sine-fm-end').textContent = endFreq;
 
   for (let i = 0; i < totalSamples; i++) {
     signal.freq.value = startFreq + freqDelta * (i / totalSamples);

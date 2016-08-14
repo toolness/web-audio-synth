@@ -40,22 +40,32 @@ class TransformSignal {
   }
 }
 
-drawGraph('#a_0', function *(sampleRate) {
+const a_0_iter = function *(sampleRate) {
   yield *makeWave(sampleRate).samples();
-});
+};
 
-drawGraph('#a_1', function *(sampleRate) {
+const a_1_iter = function *(sampleRate) {
   yield *makeFourierWave(sampleRate, 'a', 1).samples();
-});
+};
 
-drawGraph('#b_1', function *(sampleRate) {
-  yield *makeFourierWave(sampleRate, 'b', 1).samples();
-});
-
-drawGraph('#a_2', function *(sampleRate) {
+const a_2_iter = function *(sampleRate) {
   yield *makeFourierWave(sampleRate, 'a', 2).samples();
-});
+};
 
-drawGraph('#b_2', function *(sampleRate) {
+const b_1_iter = function *(sampleRate) {
+  yield *makeFourierWave(sampleRate, 'b', 1).samples();
+};
+
+const b_2_iter = function *(sampleRate) {
   yield *makeFourierWave(sampleRate, 'b', 2).samples();
-});
+};
+
+drawGraph('#a_0', a_0_iter);
+
+drawGraph('#a_1', a_1_iter);
+
+drawGraph('#b_1', b_1_iter);
+
+drawGraph('#a_2', a_2_iter);
+
+drawGraph('#b_2', b_2_iter);

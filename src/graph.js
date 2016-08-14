@@ -90,3 +90,19 @@ drawGraph('#sine-fm', function *(sampleRate, seconds, totalSamples) {
     yield samples.next().value;
   }
 });
+
+drawGraph('#sine-add', function *(sampleRate) {
+  let sine1 = new SineWave(sampleRate);
+  let sine2 = new SineWave(sampleRate);
+
+  let sine1Part = 0.75;
+  let sine2Part = 1 - sine1Part;
+  let samples2 = sine2.samples();
+
+  sine1.freq.value = 1;
+  sine2.freq.value = 50;
+
+  for (let sample1 of sine1.samples()) {
+    yield sample1 * sine1Part + samples2.next().value * sine2Part;
+  }
+});

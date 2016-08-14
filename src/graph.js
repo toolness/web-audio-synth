@@ -1,6 +1,6 @@
 "use strict";
 
-/* global d3, Constant, SineWave */
+/* global d3, Constant, SineWave, Adsr */
 
 const defaults = {
   width: 640,
@@ -105,4 +105,24 @@ drawGraph('#sine-add', function *(sampleRate) {
   for (let sample1 of sine1.samples()) {
     yield sample1 * sine1Part + samples2.next().value * sine2Part;
   }
+});
+
+drawGraph('#sine-adsr', function *(sampleRate, seconds, totalSamples) {
+  let sine = new SineWave(sampleRate);
+  let attack = seconds / 4;
+  let decay = seconds / 8;
+  let release = seconds / 6;
+  let sustain = 0.75;
+  let adsr = new Adsr(sampleRate, sine, attack, decay, sustain, release);
+  let samples = adsr.samples();
+
+  sine.freq.value = 25;
+
+  for (let i = 0; i < totalSamples - (sampleRate * release); i++) {
+    yield samples.next().value;
+  }
+
+  adsr.startRelease();
+
+  yield *samples;
 });

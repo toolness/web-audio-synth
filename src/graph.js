@@ -43,8 +43,8 @@ function drawGraph(selector, createSampleIterator, options) {
     .append('svg')
     .attr('width', width + margin.left + margin.right)
     .attr('height', height + margin.top + margin.bottom)
-    .attr('transform', translateStr(margin.left, margin.top))
-    .append('g');
+    .append('g')
+    .attr('transform', translateStr(margin.left, margin.top));
 
   y.domain(yDomain);
   x.domain([0, seconds]);

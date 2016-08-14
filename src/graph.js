@@ -87,9 +87,20 @@ function *zipIterators() {
   }
 }
 
+class FunctionSignal {
+  constructor(f) {
+    this._f = f;
+  }
+
+  *samples() {
+    for (let i = 0; i < Infinity; i++) {
+      yield this._f(i);
+    }
+  }
+}
+
 drawGraph('#sine-fm', function *(sampleRate, seconds, totalSamples) {
   let signal = new SineWave(sampleRate);
-  let samples = signal.samples()
   let startFreq = 1;
   let endFreq = 10;
   let freqDelta = endFreq - startFreq;
@@ -97,10 +108,11 @@ drawGraph('#sine-fm', function *(sampleRate, seconds, totalSamples) {
   document.querySelector('#sine-fm-start').textContent = startFreq;
   document.querySelector('#sine-fm-end').textContent = endFreq;
 
-  for (let i = 0; i < totalSamples; i++) {
-    signal.freq.value = startFreq + freqDelta * (i / totalSamples);
-    yield samples.next().value;
-  }
+  signal.freq = new FunctionSignal(i => {
+    return startFreq + freqDelta * (i / totalSamples);
+  });
+
+  yield *signal.samples();
 });
 
 drawGraph('#sine-add', function *(sampleRate) {

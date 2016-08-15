@@ -14,7 +14,18 @@ function makeWave(sampleRate) {
   return wave;
 }
 
-function makeFourierWave(waveFactory, sampleRate, type, n) {
+function makeFourierSeriesWave(sampleRate, type, n) {
+  let trigFn = {
+    a: Math.cos,
+    b: Math.sin
+  }[type];
+
+  return new FunctionSignal(i => {
+    return trigFn(n * FUNDAMENTAL_ANG_VEL * (i / sampleRate));
+  });
+}
+
+function makeFourierIntegralWave(waveFactory, sampleRate, type, n) {
   let trigFn = {
     a: Math.cos,
     b: Math.sin
@@ -42,6 +53,18 @@ function integrateOver(sampleRate, seconds, waveFactory) {
   return sum;
 }
 
+class FunctionSignal {
+  constructor(f) {
+    this._f = f;
+  }
+
+  *samples() {
+    for (let i = 0; i < Infinity; i++) {
+      yield this._f(i);
+    }
+  }
+}
+
 class TransformSignal {
   constructor(source, f) {
     this.source = source;
@@ -62,19 +85,19 @@ const a_0_iter = function *(sampleRate) {
 };
 
 const a_1_iter = function *(sampleRate) {
-  yield *makeFourierWave(makeWave, sampleRate, 'a', 1).samples();
+  yield *makeFourierIntegralWave(makeWave, sampleRate, 'a', 1).samples();
 };
 
 const a_2_iter = function *(sampleRate) {
-  yield *makeFourierWave(makeWave, sampleRate, 'a', 2).samples();
+  yield *makeFourierIntegralWave(makeWave, sampleRate, 'a', 2).samples();
 };
 
 const b_1_iter = function *(sampleRate) {
-  yield *makeFourierWave(makeWave, sampleRate, 'b', 1).samples();
+  yield *makeFourierIntegralWave(makeWave, sampleRate, 'b', 1).samples();
 };
 
 const b_2_iter = function *(sampleRate) {
-  yield *makeFourierWave(makeWave, sampleRate, 'b', 2).samples();
+  yield *makeFourierIntegralWave(makeWave, sampleRate, 'b', 2).samples();
 };
 
 function *zipIterators() {
@@ -93,20 +116,21 @@ function buildFourierSeries(waveFactory, iterations) {
   return function *(sampleRate, seconds) {
     const integral = integrateOver.bind(null, sampleRate, seconds);
     const T = sampleRate * seconds;
-    const makeFourier = makeFourierWave.bind(null, waveFactory, sampleRate);
     const allWaves = [];
     const allCoefficients = [];
 
     const a_0 = (1 / T) * integral(waveFactory(sampleRate).samples());
 
     for (let i = 0; i < iterations; i++) {
-      let aWave = makeFourier('a', i + 1);
-      let bWave = makeFourier('b', i + 1);
-
-      allWaves.push(aWave.samples(), bWave.samples());
+      allWaves.push(
+        makeFourierSeriesWave(sampleRate, 'a', i + 1).samples(),
+        makeFourierSeriesWave(sampleRate, 'b', i + 1).samples()
+      );
       allCoefficients.push(
-        2 / T * integral(aWave.samples()),
-        2 / T * integral(bWave.samples())
+        2 / T * integral(makeFourierIntegralWave(waveFactory, sampleRate,
+                                                 'a', i + 1).samples()),
+        2 / T * integral(makeFourierIntegralWave(waveFactory, sampleRate,
+                                                 'b', i + 1).samples())
       );
     }
 
@@ -128,4 +152,4 @@ drawGraph('#a_2', a_2_iter);
 
 drawGraph('#b_2', b_2_iter);
 
-drawGraph('#fourier_series', buildFourierSeries(makeWave, 2));
+drawGraph('#fourier_series', buildFourierSeries(makeWave, 6));

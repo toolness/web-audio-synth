@@ -5,7 +5,6 @@
 const FUNDAMENTAL_FREQ = 1;
 const FUNDAMENTAL_PERIOD = 1 / FUNDAMENTAL_FREQ;
 const FUNDAMENTAL_ANG_VEL = 2 * Math.PI / FUNDAMENTAL_PERIOD;
-const INTEGRATION_SAMPLE_RATE = 8192;
 
 function makeWave(sampleRate) {
   let wave = new TriangleWave(sampleRate);

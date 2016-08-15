@@ -5,6 +5,7 @@
 const FUNDAMENTAL_FREQ = 1;
 const FUNDAMENTAL_PERIOD = 1 / FUNDAMENTAL_FREQ;
 const FUNDAMENTAL_ANG_VEL = 2 * Math.PI / FUNDAMENTAL_PERIOD;
+const INTEGRATION_SAMPLE_RATE = 8192;
 
 function makeWave(sampleRate) {
   let pulse = new PulseWave(sampleRate);
@@ -23,6 +24,17 @@ function makeFourierWave(sampleRate, type, n) {
   return new TransformSignal(makeWave(sampleRate), (sample, i) => {
     return sample * trigFn(n * FUNDAMENTAL_ANG_VEL * (i / sampleRate));
   });
+}
+
+function integrateOver(sampleRate, seconds, waveFactory) {
+  let sum = 0;
+  let samples = waveFactory(sampleRate);
+
+  for (let i = 0; i < sampleRate * seconds; i++) {
+    sum += samples.next().value;
+  }
+
+  return sum;
 }
 
 class TransformSignal {
@@ -60,6 +72,48 @@ const b_2_iter = function *(sampleRate) {
   yield *makeFourierWave(sampleRate, 'b', 2).samples();
 };
 
+function *zipIterators() {
+  while (true) {
+    let values = [];
+    for (let i = 0; i < arguments.length; i++) {
+      let next = arguments[i].next();
+      if (next.done) return;
+      values.push(next.value);
+    }
+    yield values;
+  }
+}
+
+const fourier_series_iter = function *(sampleRate, seconds) {
+  const integral = integrateOver.bind(null, sampleRate, seconds);
+
+  const a_0 = (1 / seconds) * integral(a_0_iter);
+  const a_1 = (2 / seconds) * integral(a_1_iter);
+  const a_2 = (2 / seconds) * integral(a_2_iter);
+  const b_1 = (2 / seconds) * integral(b_1_iter);
+  const b_2 = (2 / seconds) * integral(b_2_iter);
+
+  let samples = zipIterators(
+    a_1_iter(sampleRate),
+    b_1_iter(sampleRate),
+    a_2_iter(sampleRate),
+    b_2_iter(sampleRate)
+  );
+
+  for (let [a_1s, b_1s, a_2s, b_2s] of samples) {
+    let sample = (
+      a_0
+      + a_1 * a_1s
+      + b_1 * b_1s
+      + a_2 * a_2s
+      + b_2 * b_2s
+    );
+    sample = Math.max(sample, -1);
+    sample = Math.min(sample, 1);
+    yield sample;
+  }
+};
+
 drawGraph('#a_0', a_0_iter);
 
 drawGraph('#a_1', a_1_iter);
@@ -69,3 +123,5 @@ drawGraph('#b_1', b_1_iter);
 drawGraph('#a_2', a_2_iter);
 
 drawGraph('#b_2', b_2_iter);
+
+drawGraph('#fourier_series', fourier_series_iter);

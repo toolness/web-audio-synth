@@ -1,6 +1,6 @@
 "use strict";
 
-/* global drawGraph, SineWave, PulseWave */
+/* global drawGraph, TriangleWave */
 
 const FUNDAMENTAL_FREQ = 1;
 const FUNDAMENTAL_PERIOD = 1 / FUNDAMENTAL_FREQ;
@@ -8,11 +8,11 @@ const FUNDAMENTAL_ANG_VEL = 2 * Math.PI / FUNDAMENTAL_PERIOD;
 const INTEGRATION_SAMPLE_RATE = 8192;
 
 function makeWave(sampleRate) {
-  let pulse = new PulseWave(sampleRate);
+  let wave = new TriangleWave(sampleRate);
 
-  pulse.freq.value = FUNDAMENTAL_FREQ;
+  wave.freq.value = FUNDAMENTAL_FREQ;
 
-  return pulse;
+  return wave;
 }
 
 function makeFourierWave(sampleRate, type, n) {
@@ -108,8 +108,6 @@ const fourier_series_iter = function *(sampleRate, seconds) {
       + a_2 * a_2s
       + b_2 * b_2s
     );
-    sample = Math.max(sample, -1);
-    sample = Math.min(sample, 1);
     yield sample;
   }
 };
@@ -124,4 +122,6 @@ drawGraph('#a_2', a_2_iter);
 
 drawGraph('#b_2', b_2_iter);
 
-drawGraph('#fourier_series', fourier_series_iter);
+drawGraph('#fourier_series', fourier_series_iter, {
+  yDomain: [-1000, 1000]
+});

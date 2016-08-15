@@ -123,5 +123,5 @@ drawGraph('#a_2', a_2_iter);
 drawGraph('#b_2', b_2_iter);
 
 drawGraph('#fourier_series', fourier_series_iter, {
-  yDomain: [-1000, 1000]
+  yDomain: [-300, 300]
 });

@@ -111,13 +111,9 @@ function buildFourierSeries(waveFactory, iterations) {
     }
 
     for (let samples of zipIterators.apply(null, allWaves)) {
-      let sum = a_0;
-
-      for (let i = 0; i < samples.length; i++) {
-        sum += allCoefficients[i] * samples[i];
-      }
-
-      yield sum;
+      yield samples.reduce((sum, sample, i) => {
+        return sum + allCoefficients[i] * sample;
+      }, a_0);
     }
   };
 }

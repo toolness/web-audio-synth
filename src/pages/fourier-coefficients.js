@@ -93,12 +93,11 @@ function buildFourierSeries(waveFactory, iterations) {
   return function *(sampleRate, seconds) {
     const integral = integrateOver.bind(null, sampleRate, seconds);
     const T = sampleRate * seconds;
-    const makeWave = waveFactory.bind(null, sampleRate);
     const makeFourier = makeFourierWave.bind(null, waveFactory, sampleRate);
     const allWaves = [];
     const allCoefficients = [];
 
-    const a_0 = (1 / T) * integral(makeWave().samples());
+    const a_0 = (1 / T) * integral(waveFactory(sampleRate).samples());
 
     for (let i = 0; i < iterations; i++) {
       let aWave = makeFourier('a', i + 1);

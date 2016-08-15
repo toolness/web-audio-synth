@@ -86,12 +86,13 @@ function *zipIterators() {
 
 const fourier_series_iter = function *(sampleRate, seconds) {
   const integral = integrateOver.bind(null, sampleRate, seconds);
+  const T = sampleRate * seconds;
 
-  const a_0 = (1 / seconds) * integral(a_0_iter);
-  const a_1 = (2 / seconds) * integral(a_1_iter);
-  const a_2 = (2 / seconds) * integral(a_2_iter);
-  const b_1 = (2 / seconds) * integral(b_1_iter);
-  const b_2 = (2 / seconds) * integral(b_2_iter);
+  const a_0 = (1 / T) * integral(a_0_iter);
+  const a_1 = (2 / T) * integral(a_1_iter);
+  const a_2 = (2 / T) * integral(a_2_iter);
+  const b_1 = (2 / T) * integral(b_1_iter);
+  const b_2 = (2 / T) * integral(b_2_iter);
 
   let samples = zipIterators(
     a_1_iter(sampleRate),
@@ -99,6 +100,8 @@ const fourier_series_iter = function *(sampleRate, seconds) {
     a_2_iter(sampleRate),
     b_2_iter(sampleRate)
   );
+
+  console.log('a_0', a_0, 'a_1', a_1, 'b_1', b_1, 'a_2', a_2, 'b_2', b_2);
 
   for (let [a_1s, b_1s, a_2s, b_2s] of samples) {
     let sample = (
@@ -122,6 +125,4 @@ drawGraph('#a_2', a_2_iter);
 
 drawGraph('#b_2', b_2_iter);
 
-drawGraph('#fourier_series', fourier_series_iter, {
-  yDomain: [-300, 300]
-});
+drawGraph('#fourier_series', fourier_series_iter);

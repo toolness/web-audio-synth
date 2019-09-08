@@ -3,7 +3,7 @@
 /* global TriangleWave, PulseWave, SineWave,
  *        AudioEngine, Adsr, Constant */
 
-let engine = new AudioEngine();
+let engine;
 
 let $ = document.querySelector.bind(document);
 
@@ -183,19 +183,25 @@ let noteDisplay = new NoteDisplay($('#midi'));
 
 let chord = new Chord(instruments, 3);
 
-engine.onmidi = e => {
-  if (e.type === 'noteon') {
-    chord.on(e.note, e.freq);
-    engine.activate(chord);
-    noteDisplay.on(e.noteString);
-  } else if (e.type === 'noteoff') {
-    chord.off(e.note);
-    noteDisplay.off(e.noteString);
-  } else if (e.type === 'programchange') {
-    instruments.select(e.programNumber);
-  } else if (e.type === 'controlchange') {
-    if (e.controllerNumber === 1) {
-      dutyCycle.value = e.controllerPercentage;
+$('#start').onclick = () => {
+  $('#start-wrapper').style.display = 'none';
+  $('#midi').style.display = 'block';
+  
+  engine = new AudioEngine();
+  engine.onmidi = e => {
+    if (e.type === 'noteon') {
+      chord.on(e.note, e.freq);
+      engine.activate(chord);
+      noteDisplay.on(e.noteString);
+    } else if (e.type === 'noteoff') {
+      chord.off(e.note);
+      noteDisplay.off(e.noteString);
+    } else if (e.type === 'programchange') {
+      instruments.select(e.programNumber);
+    } else if (e.type === 'controlchange') {
+      if (e.controllerNumber === 1) {
+        dutyCycle.value = e.controllerPercentage;
+      }
     }
-  }
+  };
 };

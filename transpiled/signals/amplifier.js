@@ -14,7 +14,7 @@ var Amplifier = function () {
 
   _createClass(Amplifier, [{
     key: "samples",
-    value: regeneratorRuntime.mark(function samples() {
+    value: /*#__PURE__*/regeneratorRuntime.mark(function samples() {
       var sourceSamples, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, nextValue;
 
       return regeneratorRuntime.wrap(function samples$(_context) {

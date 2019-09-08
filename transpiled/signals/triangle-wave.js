@@ -23,7 +23,7 @@ var TriangleWave = function () {
     }
   }, {
     key: "samples",
-    value: regeneratorRuntime.mark(function samples() {
+    value: /*#__PURE__*/regeneratorRuntime.mark(function samples() {
       var SIGNAL_LOW, SIGNAL_HIGH, freqSamples, freq, slope, signal;
       return regeneratorRuntime.wrap(function samples$(_context) {
         while (1) {

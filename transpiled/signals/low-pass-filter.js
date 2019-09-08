@@ -14,7 +14,7 @@ var LowPassFilter = function () {
 
   _createClass(LowPassFilter, [{
     key: "samples",
-    value: regeneratorRuntime.mark(function samples() {
+    value: /*#__PURE__*/regeneratorRuntime.mark(function samples() {
       var samples, sourceSamples;
       return regeneratorRuntime.wrap(function samples$(_context) {
         while (1) {

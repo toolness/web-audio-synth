@@ -9,7 +9,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var engine = new AudioEngine();
+var engine = void 0;
 
 var $ = document.querySelector.bind(document);
 
@@ -30,7 +30,7 @@ var StoredPercentage = function () {
 
   _createClass(StoredPercentage, [{
     key: 'samples',
-    value: regeneratorRuntime.mark(function samples() {
+    value: /*#__PURE__*/regeneratorRuntime.mark(function samples() {
       return regeneratorRuntime.wrap(function samples$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -121,7 +121,7 @@ var Chord = function () {
     }
   }, {
     key: 'samples',
-    value: regeneratorRuntime.mark(function samples() {
+    value: /*#__PURE__*/regeneratorRuntime.mark(function samples() {
       var toDelete, samplesMap, sample, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, _step$value, note, source, _samples, next, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, _step2$value;
 
       return regeneratorRuntime.wrap(function samples$(_context2) {
@@ -145,9 +145,7 @@ var Chord = function () {
 
 
               for (_iterator = this._sources[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                _step$value = _slicedToArray(_step.value, 2);
-                note = _step$value[0];
-                source = _step$value[1];
+                _step$value = _slicedToArray(_step.value, 2), note = _step$value[0], source = _step$value[1];
 
                 if (!samplesMap.has(source)) {
                   samplesMap.set(source, source.samples());
@@ -207,9 +205,7 @@ var Chord = function () {
               _context2.prev = 27;
 
               for (_iterator2 = toDelete[Symbol.iterator](); !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                _step2$value = _slicedToArray(_step2.value, 2);
-                note = _step2$value[0];
-                source = _step2$value[1];
+                _step2$value = _slicedToArray(_step2.value, 2), note = _step2$value[0], source = _step2$value[1];
 
                 samplesMap.delete(source);
                 this._sources.delete(note);
@@ -348,19 +344,25 @@ var noteDisplay = new NoteDisplay($('#midi'));
 
 var chord = new Chord(instruments, 3);
 
-engine.onmidi = function (e) {
-  if (e.type === 'noteon') {
-    chord.on(e.note, e.freq);
-    engine.activate(chord);
-    noteDisplay.on(e.noteString);
-  } else if (e.type === 'noteoff') {
-    chord.off(e.note);
-    noteDisplay.off(e.noteString);
-  } else if (e.type === 'programchange') {
-    instruments.select(e.programNumber);
-  } else if (e.type === 'controlchange') {
-    if (e.controllerNumber === 1) {
-      dutyCycle.value = e.controllerPercentage;
+$('#start').onclick = function () {
+  $('#start-wrapper').style.display = 'none';
+  $('#midi').style.display = 'block';
+
+  engine = new AudioEngine();
+  engine.onmidi = function (e) {
+    if (e.type === 'noteon') {
+      chord.on(e.note, e.freq);
+      engine.activate(chord);
+      noteDisplay.on(e.noteString);
+    } else if (e.type === 'noteoff') {
+      chord.off(e.note);
+      noteDisplay.off(e.noteString);
+    } else if (e.type === 'programchange') {
+      instruments.select(e.programNumber);
+    } else if (e.type === 'controlchange') {
+      if (e.controllerNumber === 1) {
+        dutyCycle.value = e.controllerPercentage;
+      }
     }
-  }
+  };
 };

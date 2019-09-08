@@ -44,7 +44,7 @@ var Adsr = function () {
     }
   }, {
     key: "samples",
-    value: regeneratorRuntime.mark(function samples() {
+    value: /*#__PURE__*/regeneratorRuntime.mark(function samples() {
       var amount, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, sample;
 
       return regeneratorRuntime.wrap(function samples$(_context) {

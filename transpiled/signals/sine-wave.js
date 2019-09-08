@@ -16,7 +16,7 @@ var SineWave = function () {
 
   _createClass(SineWave, [{
     key: "samples",
-    value: regeneratorRuntime.mark(function samples() {
+    value: /*#__PURE__*/regeneratorRuntime.mark(function samples() {
       var angle, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, freq, period, angularVelocity;
 
       return regeneratorRuntime.wrap(function samples$(_context) {

@@ -1,6 +1,6 @@
 "use strict";
 
-/* global d3, Constant, SineWave, Adsr */
+/* global drawGraph, Constant, SineWave, Adsr */
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
@@ -8,69 +8,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _marked = [zipIterators].map(regeneratorRuntime.mark);
-
-var defaults = {
-  width: 640,
-  height: 320,
-  margin: {
-    top: 20,
-    right: 50,
-    bottom: 40,
-    left: 50
-  },
-  yDomain: [-1, 1],
-  seconds: 2
-};
-
-function translateStr(x, y) {
-  return 'translate(' + x + ', ' + y + ')';
-}
-
-function drawGraph(selector, createSampleIterator, options) {
-  options = Object.assign({}, defaults, options);
-
-  var margin = options.margin;
-  var width = options.width;
-  var height = options.height;
-  var seconds = options.seconds;
-  var yDomain = options.yDomain;
-  var sampleRate = Math.floor(width / seconds);
-
-  var x = d3.scaleLinear().range([0, width]);
-
-  var y = d3.scaleLinear().range([height, 0]);
-
-  var line = d3.line().x(function (d) {
-    return x(d.x);
-  }).y(function (d) {
-    return y(d.y);
-  });
-
-  var svg = d3.select(selector).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', translateStr(margin.left, margin.top));
-
-  y.domain(yDomain);
-  x.domain([0, seconds]);
-
-  svg.append('g').attr('transform', translateStr(0, height / 2)).call(d3.axisBottom(x));
-
-  svg.append('g').call(d3.axisLeft(y));
-
-  var totalSamples = seconds * sampleRate;
-  var samples = createSampleIterator(sampleRate, seconds, totalSamples);
-  var data = [];
-
-  for (var i = 0; i < totalSamples; i++) {
-    var nextSample = samples.next();
-    if (nextSample.done) break;
-    data.push({
-      x: i / sampleRate,
-      y: nextSample.value
-    });
-  }
-
-  svg.append('path').datum(data).attr('class', 'line').attr('d', line);
-}
+var _marked = /*#__PURE__*/regeneratorRuntime.mark(zipIterators);
 
 function zipIterators() {
   var values,
@@ -125,7 +63,7 @@ function zipIterators() {
           return _context.stop();
       }
     }
-  }, _marked[0], this);
+  }, _marked, this);
 }
 
 var FunctionSignal = function () {
@@ -137,7 +75,7 @@ var FunctionSignal = function () {
 
   _createClass(FunctionSignal, [{
     key: 'samples',
-    value: regeneratorRuntime.mark(function samples() {
+    value: /*#__PURE__*/regeneratorRuntime.mark(function samples() {
       var i;
       return regeneratorRuntime.wrap(function samples$(_context2) {
         while (1) {
@@ -171,7 +109,7 @@ var FunctionSignal = function () {
   return FunctionSignal;
 }();
 
-drawGraph('#sine-fm', regeneratorRuntime.mark(function _callee(sampleRate, seconds, totalSamples) {
+drawGraph('#sine-fm', /*#__PURE__*/regeneratorRuntime.mark(function _callee(sampleRate, seconds, totalSamples) {
   var signal, startFreq, endFreq, freqDelta;
   return regeneratorRuntime.wrap(function _callee$(_context3) {
     while (1) {
@@ -200,7 +138,7 @@ drawGraph('#sine-fm', regeneratorRuntime.mark(function _callee(sampleRate, secon
   }, _callee, this);
 }));
 
-drawGraph('#sine-add', regeneratorRuntime.mark(function _callee2(sampleRate) {
+drawGraph('#sine-add', /*#__PURE__*/regeneratorRuntime.mark(function _callee2(sampleRate) {
   var sine1, sine2, sine1Part, sine2Part, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, _step$value, s1, s2;
 
   return regeneratorRuntime.wrap(function _callee2$(_context4) {
@@ -224,64 +162,62 @@ drawGraph('#sine-add', regeneratorRuntime.mark(function _callee2(sampleRate) {
 
         case 11:
           if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-            _context4.next = 20;
+            _context4.next = 18;
             break;
           }
 
-          _step$value = _slicedToArray(_step.value, 2);
-          s1 = _step$value[0];
-          s2 = _step$value[1];
-          _context4.next = 17;
+          _step$value = _slicedToArray(_step.value, 2), s1 = _step$value[0], s2 = _step$value[1];
+          _context4.next = 15;
           return s1 * sine1Part + s2 * sine2Part;
 
-        case 17:
+        case 15:
           _iteratorNormalCompletion = true;
           _context4.next = 11;
           break;
 
-        case 20:
-          _context4.next = 26;
+        case 18:
+          _context4.next = 24;
           break;
 
-        case 22:
-          _context4.prev = 22;
+        case 20:
+          _context4.prev = 20;
           _context4.t0 = _context4['catch'](9);
           _didIteratorError = true;
           _iteratorError = _context4.t0;
 
-        case 26:
-          _context4.prev = 26;
-          _context4.prev = 27;
+        case 24:
+          _context4.prev = 24;
+          _context4.prev = 25;
 
           if (!_iteratorNormalCompletion && _iterator.return) {
             _iterator.return();
           }
 
-        case 29:
-          _context4.prev = 29;
+        case 27:
+          _context4.prev = 27;
 
           if (!_didIteratorError) {
-            _context4.next = 32;
+            _context4.next = 30;
             break;
           }
 
           throw _iteratorError;
 
+        case 30:
+          return _context4.finish(27);
+
+        case 31:
+          return _context4.finish(24);
+
         case 32:
-          return _context4.finish(29);
-
-        case 33:
-          return _context4.finish(26);
-
-        case 34:
         case 'end':
           return _context4.stop();
       }
     }
-  }, _callee2, this, [[9, 22, 26, 34], [27,, 29, 33]]);
+  }, _callee2, this, [[9, 20, 24, 32], [25,, 27, 31]]);
 }));
 
-drawGraph('#sine-adsr', regeneratorRuntime.mark(function _callee3(sampleRate, seconds, totalSamples) {
+drawGraph('#sine-adsr', /*#__PURE__*/regeneratorRuntime.mark(function _callee3(sampleRate, seconds, totalSamples) {
   var sine, attack, decay, release, sustain, adsr, samples, i;
   return regeneratorRuntime.wrap(function _callee3$(_context5) {
     while (1) {

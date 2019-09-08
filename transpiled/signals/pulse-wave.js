@@ -25,7 +25,7 @@ var PulseWave = function () {
     }
   }, {
     key: "samples",
-    value: regeneratorRuntime.mark(function samples() {
+    value: /*#__PURE__*/regeneratorRuntime.mark(function samples() {
       var SIGNAL_LOW, SIGNAL_HIGH, freqSamples, dutyCycleSamples, signal, samplesUntilSignalFlip, freq, dutyCycle;
       return regeneratorRuntime.wrap(function samples$(_context) {
         while (1) {

@@ -11,7 +11,7 @@ var Noise = function () {
 
   _createClass(Noise, [{
     key: "samples",
-    value: regeneratorRuntime.mark(function samples() {
+    value: /*#__PURE__*/regeneratorRuntime.mark(function samples() {
       return regeneratorRuntime.wrap(function samples$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {

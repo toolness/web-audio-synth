@@ -93,7 +93,7 @@ var AudioEngine = function () {
     key: '_getNoteString',
     value: function _getNoteString(note) {
       var NOTES = ['C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B'].map(function (note) {
-        return note.replace('#', '♯').replace('b', '♭');
+        return note.replace('#', '\u266F').replace('b', '\u266D');
       });
 
       return NOTES[note % NOTES.length];
@@ -110,11 +110,10 @@ var AudioEngine = function () {
       var PROGRAM_CHANGE = 0xc0;
       var CONTROL_CHANGE = 0xb0;
 
-      var _e$data = _slicedToArray(e.data, 3);
-
-      var midiType = _e$data[0];
-      var note = _e$data[1];
-      var velocity = _e$data[2];
+      var _e$data = _slicedToArray(e.data, 3),
+          midiType = _e$data[0],
+          note = _e$data[1],
+          velocity = _e$data[2];
 
       var programNumber = void 0,
           type = void 0,
